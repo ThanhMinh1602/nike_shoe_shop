@@ -19,7 +19,7 @@ class HomeService {
     } catch (e) {
       // Xử lý nếu có lỗi xảy ra
       print('Error getting hotels: $e');
-      return {}; // hoặc bạn có thể trả về một giá trị mặc định khác nếu muốn
+      return {};
     }
   }
 }

@@ -6,6 +6,8 @@ class ScreenType with _$ScreenType {
   const factory ScreenType.login() = ScreenTypeLogin;
   const factory ScreenType.signup() = ScreenTypeSignup;
   const factory ScreenType.home() = ScreenTypeHome;
+  const factory ScreenType.productDetail(ProductModel productModel) =
+      ScreenTypeProductDetail;
 }
 
 class ScreenTypeHelper {
@@ -15,6 +17,8 @@ class ScreenTypeHelper {
       login: () => const LoginPage(),
       signup: () => const SignUpPage(),
       home: () => const HomePage(),
+      productDetail: (productModel) =>
+          ProductDetailPage(productModel: productModel),
     );
   }
 }

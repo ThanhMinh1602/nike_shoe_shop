@@ -7,7 +7,6 @@ import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
 import 'package:nike_shoe_shop/common/components/textfields/app_text_field_email.dart';
 import 'package:nike_shoe_shop/common/components/textfields/app_text_field_password.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
-import 'package:nike_shoe_shop/services/sevice_status.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/entities/models/requests/signup_request.dart';
