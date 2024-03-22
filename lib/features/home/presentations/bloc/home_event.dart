@@ -8,5 +8,5 @@ class HomeEvent with _$HomeEvent {
       HomeLoadMoreNewArrivalEvent;
   const factory HomeEvent.onTapToDetailProductEvent(ProductModel productModel) =
       OnTapToDetailProductEvent;
-  const factory HomeEvent.onTapCategory(int cateId) = OnTapCategory;
+  const factory HomeEvent.onTapCategoryEvent(int cateId) = OnTapCategoryEvent;
 }

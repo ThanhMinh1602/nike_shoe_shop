@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,34 +29,35 @@ class _HomeWigetState extends State<HomeWiget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColor.backgroundColor,
-        appBar: const AppBarCustom(
-          leftIcon: Icons.grid_view_rounded,
-          title: 'Mondolibug, Sylhet',
-        ),
-        body: BlocConsumer<HomeBloc, HomeState>(
-          listener: (context, state) {
-            if (state.isLoading) {
-              EasyLoading.show(status: 'loading...');
-            } else {
-              EasyLoading.dismiss();
-            }
-          },
-          builder: (context, state) {
-            return ListView(
-              padding: const EdgeInsets.only(top: 24.0, bottom: 24.0),
-              children: [
-                _buildSearchBar(),
-                const SizedBox(height: 32.0),
-                _buildCategories(),
-                const SizedBox(height: 24.0),
-                _buildPopularShoes(state),
-                const SizedBox(height: 24.0),
-                _buildNewArrival(state),
-              ],
-            );
-          },
-        ));
+      backgroundColor: AppColor.backgroundColor,
+      appBar: const AppBarCustom(
+        leftIcon: Icons.grid_view_rounded,
+        title: 'Mondolibug, Sylhet',
+      ),
+      body: BlocConsumer<HomeBloc, HomeState>(
+        listener: (context, state) {
+          if (state.isLoading) {
+            EasyLoading.show(status: 'loading...');
+          } else {
+            EasyLoading.dismiss();
+          }
+        },
+        builder: (context, state) {
+          return ListView(
+            padding: const EdgeInsets.only(top: 24.0, bottom: 24.0),
+            children: [
+              _buildSearchBar(),
+              const SizedBox(height: 32.0),
+              _buildCategories(state),
+              const SizedBox(height: 24.0),
+              _buildPopularShoes(state),
+              const SizedBox(height: 24.0),
+              _buildNewArrival(state),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   Widget _buildPopularShoes(HomeState state) {
@@ -243,23 +245,57 @@ class _HomeWigetState extends State<HomeWiget> {
     );
   }
 
-  Widget _buildCategories() {
+  Widget _buildCategories(HomeState state) {
     return SizedBox(
       height: 44.0.w,
       child: ListView.separated(
         padding: paddingHori,
         scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
+        itemCount: state.categories.length,
         separatorBuilder: (_, __) => const SizedBox(width: 16.0),
         itemBuilder: (context, index) {
-          return CircleAvatar(
-            radius: 22.0.w,
-            backgroundColor: AppColor.whiteColor,
-            child: Padding(
-              padding: EdgeInsets.all(6.0.w),
-              child: SvgPicture.asset(
-                categories[index].image,
-                width: 26.0.w,
+          final isSelected = state.selectedCategoryIndex == index;
+          return GestureDetector(
+            onTap: () {
+              context
+                  .getBloc<HomeBloc>()
+                  .add(OnTapCategoryEvent(state.categories[index].id));
+            },
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              padding: EdgeInsets.symmetric(
+                vertical: isSelected ? 6.0.w : 0,
+              ).copyWith(right: isSelected ? 16.0.w : 0),
+              height: 44.h,
+              decoration: BoxDecoration(
+                color: isSelected
+                    ? AppColor.primaryColor
+                    : AppColor.primaryColor.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(40.0.r),
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 22.0.w,
+                    backgroundColor: AppColor.whiteColor,
+                    child: Padding(
+                      padding: EdgeInsets.all(6.0.w),
+                      child: SvgPicture.asset(
+                        categories[index].image,
+                        width: 26.0.w,
+                        color: AppColor.blackColor,
+                      ),
+                    ),
+                  ),
+                  if (isSelected) SizedBox(width: 3.0.w),
+                  if (isSelected)
+                    Text(
+                      state.categories[index].name.toUpperCase(),
+                      style: AppStyle.categoryStyle.copyWith(
+                        color: AppColor.whiteColor,
+                      ),
+                    )
+                ],
               ),
             ),
           );

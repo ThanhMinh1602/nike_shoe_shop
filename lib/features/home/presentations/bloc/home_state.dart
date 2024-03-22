@@ -9,5 +9,6 @@ class HomeState with _$HomeState {
     @Default([]) List<CategoryModel> categories,
     @Default(false) bool? isLoadMorePopular,
     @Default(false) bool? isLoadMoreNewArrival,
+    @Default(0) int selectedCategoryIndex,
   }) = HomeInitialState;
 }

@@ -1,25 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nike_shoe_shop/entities/models/appmodels/category_model.dart';
+import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 
 class HomeService {
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final firestore = FirebaseFirestore.instance;
+  Future<List<CategoryModel>> fetchCategories() async {
+    final querySnapshot = await firestore.collection('categories').get();
+    List<CategoryModel> categories = querySnapshot.docs
+        .map((doc) => CategoryModel.fromJson(doc.data()))
+        .toList();
+    return categories;
+  }
 
-  Future<Map<String, dynamic>> getAllHotels() async {
-    try {
-      // Lấy tất cả các documents từ collection "hotels"
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await _firestore.collection('hotels').get();
-
-      // Chuyển đổi danh sách các documents thành một Map
-      Map<String, dynamic> hotelMap = {};
-      querySnapshot.docs.forEach((doc) {
-        hotelMap[doc.id] = doc.data();
-      });
-
-      return hotelMap;
-    } catch (e) {
-      // Xử lý nếu có lỗi xảy ra
-      print('Error getting hotels: $e');
-      return {};
-    }
+  Future<List<ProductModel>> fetchProducts() async {
+    final querySnapshot = await firestore.collection('products').get();
+    List<ProductModel> productByCateId = querySnapshot.docs
+        .map((doc) => ProductModel.fromJson(doc.data()))
+        .toList();
+    return productByCateId;
   }
 }

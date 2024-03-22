@@ -28,12 +28,16 @@ class AppStyle {
     fontSize: 10.sp,
     fontWeight: FontWeight.w400,
   );
-   static TextStyle regular12 = GoogleFonts.aBeeZee(
+  static TextStyle regular12 = GoogleFonts.aBeeZee(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
   );
   static TextStyle regular14 = GoogleFonts.aBeeZee(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
+  );
+  static TextStyle categoryStyle = GoogleFonts.aBeeZee(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.bold,
   );
 }

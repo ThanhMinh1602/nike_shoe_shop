@@ -6,7 +6,7 @@ import 'package:nike_shoe_shop/services/firebase_options.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
 
-void main() {
+void main() async {
   _initialService();
   runApp(const MyApp());
 }
