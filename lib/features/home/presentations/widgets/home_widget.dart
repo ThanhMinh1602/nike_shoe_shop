@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,9 +8,11 @@ import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/responses/promotion_model.dart';
 import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
 import 'package:nike_shoe_shop/gen/assets.gen.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -20,11 +24,26 @@ class HomeWidget extends StatefulWidget {
 
 class _HomeWidgetState extends State<HomeWidget> {
   final TextEditingController _searchController = TextEditingController();
-
+  final PageController _promotionController = PageController();
+  int _currentPage = 0;
   @override
   void initState() {
     super.initState();
     context.read<HomeBloc>().add(const HomeInitialEvent());
+    Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      if (_currentPage < 4) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      if (_promotionController.hasClients) {
+        _promotionController.animateToPage(
+          _currentPage,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.ease,
+        );
+      }
+    });
   }
 
   @override
@@ -85,7 +104,9 @@ class _HomeWidgetState extends State<HomeWidget> {
     }
     return Column(
       children: [
-        const SizedBox(height: 32.0),
+        const SizedBox(height: 10.0),
+        _buildPromotion(),
+        const SizedBox(height: 24.0),
         _buildCategories(state),
         const SizedBox(height: 24.0),
         _buildPopularShoes(state),
@@ -105,7 +126,9 @@ class _HomeWidgetState extends State<HomeWidget> {
         ]),
         child: Column(
           children: [
-            const SizedBox(height: 32.0),
+            const SizedBox(height: 10.0),
+            _buildPromotion(),
+            const SizedBox(height: 24.0),
             _buildCategories(state),
             const SizedBox(height: 24.0),
             _buildPopularShoes(state),
@@ -113,6 +136,58 @@ class _HomeWidgetState extends State<HomeWidget> {
             _buildNewArrival(state),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPromotion() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildListPromotion(),
+        const SizedBox(height: 10.0),
+        _buildPageIndicator(),
+      ],
+    );
+  }
+
+  Widget _buildPageIndicator() {
+    return Center(
+      child: SmoothPageIndicator(
+        effect: ExpandingDotsEffect(
+          dotColor: AppColor.greyColor,
+          activeDotColor: AppColor.primaryColor,
+          dotHeight: 2.0.h,
+          dotWidth: 12.0,
+          spacing: 4.0.w,
+        ),
+        controller: _promotionController,
+        count: 5,
+      ),
+    );
+  }
+
+  Widget _buildListPromotion() {
+    return SizedBox(
+      height: 109.33.h,
+      width: double.infinity,
+      child: PageView.builder(
+        controller: _promotionController,
+        itemCount: 5,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0.r),
+              child: Image.network(
+                promotions[index].path,
+                fit: BoxFit.cover,
+                width: 328.w,
+                height: 109.33.h,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -177,7 +252,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   Widget _buildSearchEmpty() {
     return Padding(
-      padding:  EdgeInsets.only(top: 200.h),
+      padding: EdgeInsets.only(top: 200.h),
       child: Column(
         children: [
           Image.asset(Assets.images.nothingFound.path),
