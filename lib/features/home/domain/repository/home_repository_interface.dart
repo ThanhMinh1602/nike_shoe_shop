@@ -6,4 +6,5 @@ abstract class IHomeRepository {
   Future<List<ProductModel>> bestSalerProductByCategoryId(int cateId);
   Future<ProductModel> newProductByCategoryId(int cateId);
   Future<List<ProductModel>> searchProducts(String texSearch);
+  Future<void> logOut();
 }

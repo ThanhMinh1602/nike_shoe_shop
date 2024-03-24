@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
+import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/promotion_model.dart';
 import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
@@ -52,26 +54,49 @@ class _HomeWidgetState extends State<HomeWidget> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         backgroundColor: AppColor.backgroundColor,
-        appBar: AppBarCustom(
-          title: 'Mondolibug, Sylhet',
+        appBar: _buildAppBar(),
+        drawer: Drawer(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  context.getBloc<HomeBloc>().add(const OnTapLogOutEvent());
+                },
+                child: const Row(
+                  children: [Icon(Icons.logout_sharp), Text('Logout')],
+                ),
+              )
+            ],
+          ),
         ),
-        body: BlocConsumer<HomeBloc, HomeState>(
-          listener: (context, state) {},
-          builder: (context, state) {
-            return ListView(
-              padding: const EdgeInsets.only(top: 24.0, bottom: 24.0),
-              children: [
-                _buildSearchBar(),
-                _searchController.text.isEmpty
-                    ? _buildHomeContent(state)
-                    : state.searchProductsResult.isEmpty
-                        ? _buildSearchEmpty()
-                        : _buildSearchResult(state),
-              ],
-            );
-          },
-        ),
+        body: _buildHomeBody(),
       ),
+    );
+  }
+
+  AppBarCustom _buildAppBar() {
+    return AppBarCustom(
+      title: 'Mondolibug, Sylhet',
+    );
+  }
+
+  BlocConsumer<HomeBloc, HomeState> _buildHomeBody() {
+    return BlocConsumer<HomeBloc, HomeState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return ListView(
+          padding: const EdgeInsets.only(top: 24.0, bottom: 24.0),
+          children: [
+            _buildSearchBar(),
+            _searchController.text.isEmpty
+                ? _buildHomeContent(state)
+                : state.searchProductsResult.isEmpty
+                    ? _buildSearchEmpty()
+                    : _buildSearchResult(state),
+          ],
+        );
+      },
     );
   }
 

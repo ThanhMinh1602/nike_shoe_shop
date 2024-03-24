@@ -23,6 +23,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on(_onCategoryTap);
     on(_onTapProductDetail);
     on(_onTapSearchProduct);
+    on(_onTapLogOut);
   }
 
   Future<void> _onInit(
@@ -68,5 +69,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final List<ProductModel> products =
         await repository.searchProducts(event.textSearch);
     emitter(state.copyWith(searchProductsResult: products));
+  }
+
+  Future<void> _onTapLogOut(
+      OnTapLogOutEvent event, Emitter<HomeState> emitter) async {
+    await repository.logOut();
+    appNavigator.pushAndRemoveUntil(screen: const ScreenType.login());
   }
 }

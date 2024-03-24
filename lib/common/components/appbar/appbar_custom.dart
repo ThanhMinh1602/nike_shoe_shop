@@ -24,6 +24,7 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
           GestureDetector(
             onTap: () {
               if (title == location) {
+                Scaffold.of(context).openDrawer();
               } else {
                 navigator.pop();
               }

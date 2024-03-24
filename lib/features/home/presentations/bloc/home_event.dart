@@ -13,4 +13,5 @@ class HomeEvent with _$HomeEvent {
       OnTapAddProductToCart;
   const factory HomeEvent.onTapSearchProductEvent(String textSearch) =
       OnTapSearchProductEvent;
+  const factory HomeEvent.onTapLogOutEvent() = OnTapLogOutEvent;
 }

@@ -1,6 +1,7 @@
 import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/features/home/domain/repository/home_repository_interface.dart';
+import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/services/remote/home_service.dart';
 
 class HomeRepositoryImpl implements IHomeRepository {
@@ -28,5 +29,10 @@ class HomeRepositoryImpl implements IHomeRepository {
   @override
   Future<List<ProductModel>> searchProducts(String texSearch) {
     return homeService.searchProducts(texSearch);
+  }
+
+  @override
+  Future<void> logOut() async {
+    await SharedPrefs.removeSeason();
   }
 }
