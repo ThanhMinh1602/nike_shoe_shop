@@ -2,36 +2,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
+import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
+import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 
+// ignore: must_be_immutable
 class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarCustom({
+  AppBarCustom({
     super.key,
     this.title,
-    this.onTapLeft,
-    this.onTapRight,
-    this.leftIcon,
   });
   final String? title;
-  final void Function()? onTapLeft;
-  final void Function()? onTapRight;
-  final IconData? leftIcon;
+  String location = 'Mondolibug, Sylhet';
   @override
   Widget build(BuildContext context) {
+    AppNavigator navigator = context.getNavigator();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0)
           .copyWith(top: MediaQuery.of(context).padding.top + 8.0.h),
       child: Row(
         children: [
           GestureDetector(
-            onTap: onTapLeft,
+            onTap: () {
+              if (title == location) {
+              } else {
+                navigator.pop();
+              }
+            },
             child: CircleAvatar(
               radius: 22.0.r,
               backgroundColor: AppColor.whiteColor,
-              child: Icon(leftIcon, color: AppColor.textColor, size: 15.0.r),
+              child: Icon(
+                  title == location
+                      ? Icons.grid_view_rounded
+                      : Icons.arrow_back_rounded,
+                  color: AppColor.textColor,
+                  size: 20.0.r),
             ),
           ),
           const Spacer(),
-          if (title != null)
+          if (title == location)
             Icon(Icons.location_on_sharp,
                 color: AppColor.redColor, size: 12.0.r),
           const SizedBox(width: 4.0),
@@ -40,29 +49,32 @@ class AppBarCustom extends StatelessWidget implements PreferredSizeWidget {
             style: AppStyle.loginSubTitle,
           ),
           const Spacer(),
-          Stack(
-            children: [
-              GestureDetector(
-                onTap: onTapRight,
-                child: CircleAvatar(
-                  radius: 22.0.r,
-                  backgroundColor: AppColor.whiteColor,
-                  child: Icon(
-                    Icons.shopping_bag_rounded,
-                    color: AppColor.textColor,
-                    size: 15.0.r,
-                  ),
-                ),
-              ),
-              Positioned(
-                  right: 2.w,
-                  top: 3.h,
-                  child: CircleAvatar(
-                    radius: 4.0.r,
-                    backgroundColor: AppColor.redColor,
-                  ))
-            ],
-          ),
+          (title == location || title == 'Men’s Shoes')
+              ? Stack(
+                  children: [
+                    GestureDetector(
+                      onTap: () =>
+                          navigator.push(screen: const ScreenType.cart()),
+                      child: CircleAvatar(
+                        radius: 22.0.r,
+                        backgroundColor: AppColor.whiteColor,
+                        child: Icon(
+                          Icons.shopping_bag_rounded,
+                          color: AppColor.textColor,
+                          size: 15.0.r,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                        right: 2.w,
+                        top: 3.h,
+                        child: CircleAvatar(
+                          radius: 4.0.r,
+                          backgroundColor: AppColor.redColor,
+                        ))
+                  ],
+                )
+              : const SizedBox(),
         ],
       ),
     );

@@ -8,4 +8,5 @@ class AppColor {
   static const textColor = Color(0xFF1A2530);
   static const redColor = Colors.red;
   static const subTextColor = Color(0xFF707B81);
+  static const greyColor = Color(0xFFB4B4B4);
 }

@@ -12,7 +12,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   ProductDetailBloc({required this.appNavigator})
       : super(const ProductDetailInitalState()) {
     on(_onDetailInitial);
-    on(_onTapBack);
     on(_onTapSelectSize);
   }
 }
@@ -26,11 +25,6 @@ extension HandleEvent on ProductDetailBloc {
         selectedSize: event.product.sizes.first,
       ),
     );
-  }
-
-  Future<void> _onTapBack(
-      OnTapBackEvent event, Emitter<ProductDetailState> emitter) async {
-    appNavigator.pop();
   }
 
   void _onTapSelectSize(

@@ -20,57 +20,60 @@ class LoginWidget extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.backgroundColor,
-      body: BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
-        if (state.isLoading) {
-          EasyLoading.show(status: 'loading...');
-        } else {
-          EasyLoading.dismiss();
-        }
-      }, builder: (context, state) {
-        return Form(
-          key: _formKey,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
-                top: MediaQuery.of(context).padding.top + 84.h, bottom: 20.h),
-            children: [
-              Center(child: Text('Hello Again!', style: AppStyle.loginTitle)),
-              Center(
-                child: Text('Welcome Back You’ve Been Missed!',
-                    style: AppStyle.loginSubTitle
-                        .copyWith(color: Colors.grey[600])),
-              ),
-              SizedBox(height: 50.h),
-              Text('Email address', style: TextStyle(fontSize: 10.sp)),
-              const SizedBox(height: 12.0),
-              _buildEmailInput(),
-              SizedBox(height: 20.0.h),
-              Text('Password', style: TextStyle(fontSize: 10.sp)),
-              const SizedBox(height: 12.0),
-              _buildPasswordInput(),
-              const SizedBox(height: 12.0),
-              Text(
-                'Recovery Password',
-                textAlign: TextAlign.end,
-                style: AppStyle.regular10,
-              ),
-              const SizedBox(height: 30.0),
-              _buildLoginButton(context),
-              SizedBox(height: 230.0.h),
-              RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: 'Don’t have an account?',
-                        style: AppStyle.regular10
-                            .copyWith(color: Colors.grey[400])),
-                    _buildPushToSignUp(context),
-                  ]))
-            ],
-          ),
-        );
-      }),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
+        backgroundColor: AppColor.backgroundColor,
+        body: BlocConsumer<LoginBloc, LoginState>(listener: (context, state) {
+          if (state.isLoading) {
+            EasyLoading.show(status: 'loading...');
+          } else {
+            EasyLoading.dismiss();
+          }
+        }, builder: (context, state) {
+          return Form(
+            key: _formKey,
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
+                  top: MediaQuery.of(context).padding.top + 84.h, bottom: 20.h),
+              children: [
+                Center(child: Text('Hello Again!', style: AppStyle.loginTitle)),
+                Center(
+                  child: Text('Welcome Back You’ve Been Missed!',
+                      style: AppStyle.loginSubTitle
+                          .copyWith(color: Colors.grey[600])),
+                ),
+                SizedBox(height: 50.h),
+                Text('Email address', style: TextStyle(fontSize: 10.sp)),
+                const SizedBox(height: 12.0),
+                _buildEmailInput(),
+                SizedBox(height: 20.0.h),
+                Text('Password', style: TextStyle(fontSize: 10.sp)),
+                const SizedBox(height: 12.0),
+                _buildPasswordInput(),
+                const SizedBox(height: 12.0),
+                Text(
+                  'Recovery Password',
+                  textAlign: TextAlign.end,
+                  style: AppStyle.regular10,
+                ),
+                const SizedBox(height: 30.0),
+                _buildLoginButton(context),
+                SizedBox(height: 230.0.h),
+                RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(children: [
+                      TextSpan(
+                          text: 'Don’t have an account?',
+                          style: AppStyle.regular10
+                              .copyWith(color: Colors.grey[400])),
+                      _buildPushToSignUp(context),
+                    ]))
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 

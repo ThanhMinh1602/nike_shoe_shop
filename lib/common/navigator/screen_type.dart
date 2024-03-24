@@ -8,6 +8,7 @@ class ScreenType with _$ScreenType {
   const factory ScreenType.home() = ScreenTypeHome;
   const factory ScreenType.productDetail(ProductModel productModel) =
       ScreenTypeProductDetail;
+  const factory ScreenType.cart() = ScreenTypeCart;
 }
 
 class ScreenTypeHelper {
@@ -19,6 +20,7 @@ class ScreenTypeHelper {
       home: () => const HomePage(),
       productDetail: (productModel) =>
           ProductDetailPage(productModel: productModel),
+      cart: () => const CartPage(),
     );
   }
 }

@@ -1,7 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
-import 'package:nike_shoe_shop/entities/models/appmodels/category_model.dart';
+import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/features/home/data/home_repository_impl.dart';
 
@@ -17,10 +18,11 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     required this.appNavigator,
     required this.repository,
   }) : super(const HomeInitialState()) {
-    on<HomeInitialEvent>(_onInit);
-    on<HomeLoadMorePopularEvent>(_onLoadMorePopular);
-    on<OnTapCategoryEvent>(_onCategoryTap);
-    on<OnTapToDetailProductEvent>(_onTapProductDetail);
+    on(_onInit);
+    on(_onLoadMorePopular);
+    on(_onCategoryTap);
+    on(_onTapProductDetail);
+    on(_onTapSearchProduct);
   }
 
   Future<void> _onInit(
@@ -45,23 +47,26 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   Future<void> _onCategoryTap(
       OnTapCategoryEvent event, Emitter<HomeState> emitter) async {
-    try {
-      final List<ProductModel> products =
-          await repository.bestSalerProductByCategoryId(event.cateId);
-      final ProductModel newProduct =
-          await repository.newProductByCategoryId(event.cateId);
-      emitter(state.copyWith(
-        selectedCategoryIndex: event.cateId,
-        bestSalerProducts: products,
-        newProduct: newProduct,
-      ));
-    } catch (error) {
-      throw Exception('Error when get product by category $error');
-    }
+    final List<ProductModel> products =
+        await repository.bestSalerProductByCategoryId(event.cateId);
+    final ProductModel newProduct =
+        await repository.newProductByCategoryId(event.cateId);
+    emitter(state.copyWith(
+      selectedCategoryIndex: event.cateId,
+      bestSalerProducts: products,
+      newProduct: newProduct,
+    ));
   }
 
   void _onTapProductDetail(
       OnTapToDetailProductEvent event, Emitter<HomeState> emitter) {
     appNavigator.push(screen: ScreenType.productDetail(event.productModel));
+  }
+
+  Future<void> _onTapSearchProduct(
+      OnTapSearchProductEvent event, Emitter<HomeState> emitter) async {
+    final List<ProductModel> products =
+        await repository.searchProducts(event.textSearch);
+    emitter(state.copyWith(searchProductsResult: products));
   }
 }

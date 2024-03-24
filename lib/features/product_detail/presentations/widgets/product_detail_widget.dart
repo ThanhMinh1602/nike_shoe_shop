@@ -37,11 +37,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   }
 
   AppBarCustom _buildProductDetailAppBar(BuildContext context) {
-    return AppBarCustom(
-      leftIcon: Icons.arrow_back_ios_rounded,
-      onTapLeft: () =>
-          context.getBloc<ProductDetailBloc>().add(const OnTapBackEvent()),
-    );
+    return AppBarCustom(title: 'Men’s Shoes');
   }
 
   Widget _buildProductDetailBody() {

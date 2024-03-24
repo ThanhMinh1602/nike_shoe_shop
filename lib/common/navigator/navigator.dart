@@ -3,6 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/features/auth/login/presentations/page/login_page.dart';
 import 'package:nike_shoe_shop/features/auth/signup/presentations/page/signup_page.dart';
+import 'package:nike_shoe_shop/features/cart/presentations/page/cart_page.dart';
 import 'package:nike_shoe_shop/features/home/presentations/page/home_page.dart';
 import 'package:nike_shoe_shop/features/product_detail/presentations/page/product_detail_page.dart';
 import 'package:nike_shoe_shop/features/splash/presentations/page/splash_page.dart';
