@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +7,6 @@ import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
-import 'package:nike_shoe_shop/entities/models/appmodels/category_model.dart';
 import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
 
 class HomeWiget extends StatefulWidget {
@@ -117,57 +115,52 @@ class _HomeWigetState extends State<HomeWiget> {
   }
 
   Widget _buildNewArrival(HomeState state) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('New Arrivals', style: AppStyle.regular14),
-              GestureDetector(
-                onTap: () {
-                  context
-                      .getBloc<HomeBloc>()
-                      .add(const HomeLoadMoreNewArrivalEvent());
-                },
-                child: Text('See all',
-                    style: AppStyle.regular10
-                        .copyWith(color: AppColor.primaryColor)),
-              )
-            ],
-          ),
-          const SizedBox(height: 16.0),
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: state.isLoadMoreNewArrival == true
-                ? state.newProducts.length
-                : 2,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 21.w,
-              crossAxisCount: 2,
-              mainAxisSpacing: 21.w,
-              mainAxisExtent: 212.h,
-            ),
-            itemBuilder: (context, index) {
-              final product = state.newProducts[index];
-              return _buildPopolarItem(
-                image: product.image,
-                title: 'Best Choice',
-                name: product.name,
-                price: product.price.toString(),
-                onTapAddToCart: () {},
-                onTapDetail: () {
-                  context
-                      .getBloc<HomeBloc>()
-                      .add(OnTapToDetailProductEvent(product));
-                },
-              );
-            },
-          )
-        ],
+    return GestureDetector(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('New Arrivals', style: AppStyle.regular14),
+            const SizedBox(height: 16.0),
+            Container(
+              padding: EdgeInsets.all(20.0.w),
+              decoration: BoxDecoration(
+                  color: AppColor.whiteColor,
+                  borderRadius: BorderRadius.circular(16.0.r)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'BEST CHOICE',
+                          style: AppStyle.regular12
+                              .copyWith(color: AppColor.primaryColor),
+                        ),
+                        SizedBox(height: 4.0.h),
+                        Text(state.newProduct?.name ?? '',
+                            style: AppStyle.bold16),
+                        SizedBox(height: 10.0.h),
+                        Text('\$${state.newProduct?.price}',
+                            style: AppStyle.regular14
+                                .copyWith(fontWeight: FontWeight.w700))
+                      ],
+                    ),
+                  ),
+                  Image.network(
+                    state.newProduct?.image ?? '',
+                    height: 100.0.h,
+                    width: 100.0.h,
+                    fit: BoxFit.cover,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -257,9 +250,7 @@ class _HomeWigetState extends State<HomeWiget> {
           final isSelected = state.selectedCategoryIndex == index;
           return GestureDetector(
             onTap: () {
-              context
-                  .getBloc<HomeBloc>()
-                  .add(OnTapCategoryEvent(state.categories[index].id));
+              context.getBloc<HomeBloc>().add(OnTapCategoryEvent(index));
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
@@ -281,8 +272,9 @@ class _HomeWigetState extends State<HomeWiget> {
                     child: Padding(
                       padding: EdgeInsets.all(6.0.w),
                       child: SvgPicture.asset(
-                        categories[index].image,
+                        state.categories[index].image,
                         width: 26.0.w,
+                        // ignore: deprecated_member_use
                         color: AppColor.blackColor,
                       ),
                     ),

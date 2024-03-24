@@ -3,20 +3,33 @@ import 'package:nike_shoe_shop/entities/models/appmodels/category_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 
 class HomeService {
-  final firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Future<List<CategoryModel>> fetchCategories() async {
-    final querySnapshot = await firestore.collection('categories').get();
-    List<CategoryModel> categories = querySnapshot.docs
+    final querySnapshot =
+        await _firestore.collection('categories').orderBy('id').get();
+    return querySnapshot.docs
         .map((doc) => CategoryModel.fromJson(doc.data()))
         .toList();
-    return categories;
   }
 
-  Future<List<ProductModel>> fetchProducts() async {
-    final querySnapshot = await firestore.collection('products').get();
-    List<ProductModel> productByCateId = querySnapshot.docs
+  Future<List<ProductModel>> fetchBestSalerProducts() async {
+    final querySnapshot = await _firestore
+        .collection('products')
+        .orderBy('orderCount', descending: true)
+        .get();
+    return querySnapshot.docs
         .map((doc) => ProductModel.fromJson(doc.data()))
         .toList();
-    return productByCateId;
+  }
+
+  Future<List<ProductModel>> fetchNewProducts() async {
+    final querySnapshot = await _firestore
+        .collection('products')
+        .orderBy('id', descending: true)
+        .get();
+    return querySnapshot.docs
+        .map((doc) => ProductModel.fromJson(doc.data()))
+        .toList();
   }
 }

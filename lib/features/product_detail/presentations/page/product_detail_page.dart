@@ -13,7 +13,7 @@ class ProductDetailPage extends StatelessWidget {
     return BlocProvider(
       create: ProductDetailBinding.generateBloc,
       child: ProductDetailWidget(
-        productModel: productModel,
+        product: productModel,
       ),
     );
   }

@@ -36,6 +36,10 @@ class AppStyle {
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle bold16 = GoogleFonts.aBeeZee(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.bold,
+  );
   static TextStyle categoryStyle = GoogleFonts.aBeeZee(
     fontSize: 10.sp,
     fontWeight: FontWeight.bold,

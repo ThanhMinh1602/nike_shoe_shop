@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/appmodels/category_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
-import 'package:nike_shoe_shop/services/remote/home_service.dart';
+import 'package:nike_shoe_shop/features/home/data/home_repository_impl.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -11,34 +11,30 @@ part 'home_bloc.freezed.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final AppNavigator appNavigator;
-  final HomeService homeService;
+  final HomeRepositoryImpl repository;
+
   HomeBloc({
     required this.appNavigator,
-    required this.homeService,
+    required this.repository,
   }) : super(const HomeInitialState()) {
-    on(_onInit);
-    on(_onLoadMorePopular);
-    on(_onLoadMoreNewArrival);
-    on(_onTapProductDetail);
-    on(_onCategoryTap);
+    on<HomeInitialEvent>(_onInit);
+    on<HomeLoadMorePopularEvent>(_onLoadMorePopular);
+    on<OnTapCategoryEvent>(_onCategoryTap);
+    on<OnTapToDetailProductEvent>(_onTapProductDetail);
   }
-}
 
-extension EventHandle on HomeBloc {
   Future<void> _onInit(
       HomeInitialEvent event, Emitter<HomeState> emitter) async {
     emitter(const HomeInitialState(isLoading: true));
-    List<ProductModel> bestSalerProducts = products
-        .where((element) => element.orderCount > 300 && element.categoryId == 0)
-        .toList();
-    List<ProductModel> newProducts =
-        products.where((element) => element.id > products.length - 5).toList();
-    List<CategoryModel> categoriesData = await homeService.fetchCategories();
-    emitter(HomeState(
+    final List<CategoryModel> categories = await repository.allCategories();
+    final List<ProductModel> bestSalerProducts =
+        await repository.bestSalerProductByCategoryId(0);
+    final ProductModel newProduct = await repository.newProductByCategoryId(0);
+    emitter(state.copyWith(
       isLoading: false,
+      categories: categories,
       bestSalerProducts: bestSalerProducts,
-      newProducts: newProducts,
-      categories: categoriesData,
+      newProduct: newProduct,
     ));
   }
 
@@ -47,28 +43,25 @@ extension EventHandle on HomeBloc {
     emitter(state.copyWith(isLoadMorePopular: true));
   }
 
-  Future<void> _onLoadMoreNewArrival(
-      HomeLoadMoreNewArrivalEvent event, Emitter<HomeState> emitter) async {
-    emitter(state.copyWith(isLoadMoreNewArrival: true));
-  }
-
   Future<void> _onCategoryTap(
       OnTapCategoryEvent event, Emitter<HomeState> emitter) async {
-    final datas = await homeService.fetchProducts();
-    List<ProductModel> productDatas = datas
-        .where((element) =>
-            element.orderCount > 300 && element.categoryId == event.cateId)
-        .toList();
-    List<CategoryModel> categoriesData = categories;
-    emitter(HomeState(
-        isLoading: false,
-        bestSalerProducts: productDatas,
-        categories: categoriesData,
-        selectedCategoryIndex: event.cateId));
+    try {
+      final List<ProductModel> products =
+          await repository.bestSalerProductByCategoryId(event.cateId);
+      final ProductModel newProduct =
+          await repository.newProductByCategoryId(event.cateId);
+      emitter(state.copyWith(
+        selectedCategoryIndex: event.cateId,
+        bestSalerProducts: products,
+        newProduct: newProduct,
+      ));
+    } catch (error) {
+      throw Exception('Error when get product by category $error');
+    }
   }
 
-  Future<void> _onTapProductDetail(
-      OnTapToDetailProductEvent event, Emitter<HomeState> emitter) async {
+  void _onTapProductDetail(
+      OnTapToDetailProductEvent event, Emitter<HomeState> emitter) {
     appNavigator.push(screen: ScreenType.productDetail(event.productModel));
   }
 }
