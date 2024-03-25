@@ -6,4 +6,6 @@ class ProductDetailEvent with _$ProductDetailEvent {
       ProductDetailInitialEvent;
   const factory ProductDetailEvent.onTapSelectSizeEvent(int size) =
       OnTapSelectSizeEvent;
+  const factory ProductDetailEvent.onTapAddProductToCartEvent(
+      CartModel cartModel) = OnTapAddProductToCartEvent;
 }

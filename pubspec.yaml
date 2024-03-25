@@ -46,14 +46,14 @@ dependencies:
   google_fonts: ^6.2.1
   http: ^1.2.1
   image_picker: ^1.0.7
-  input_quantity: ^2.2.0
+  input_quantity: ^2.3.2
   intl: ^0.19.0
-  mysql1: ^0.20.0
   page_transition: ^2.1.0
   roundcheckbox: ^2.0.5
   shared_preferences: ^2.2.2
   shimmer: ^3.0.0
   smooth_page_indicator: ^1.1.0
+  sqflite: ^2.3.2
   table_calendar: ^3.1.0
 
 dev_dependencies:

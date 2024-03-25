@@ -6,7 +6,10 @@ import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
+import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/features/cart/presentations/bloc/cart_bloc.dart';
+import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
 import 'package:nike_shoe_shop/features/product_detail/presentations/bloc/product_detail_bloc.dart';
 
 class ProductDetailWidget extends StatefulWidget {
@@ -31,13 +34,12 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     return Scaffold(
       backgroundColor: AppColor.backgroundColor,
       appBar: _buildProductDetailAppBar(context),
-      bottomNavigationBar: _buildBottomBar(),
       body: _buildProductDetailBody(),
     );
   }
 
   AppBarCustom _buildProductDetailAppBar(BuildContext context) {
-    return AppBarCustom(title: 'Men’s Shoes');
+    return const AppBarCustom(title: 'Men’s Shoes');
   }
 
   Widget _buildProductDetailBody() {
@@ -48,6 +50,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           children: [
             _buildProductImage(),
             _buildProductDetails(state),
+            _buildBottomBar(state),
           ],
         );
       },
@@ -185,7 +188,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
     );
   }
 
-  Widget _buildBottomBar() {
+  Widget _buildBottomBar(ProductDetailState state) {
     return Container(
       height: 94.0.h,
       padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 16.0.h),
@@ -199,7 +202,20 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
           Expanded(
             child: AppButton(
               buttonText: 'Add To Cart',
-              onPressed: () {},
+              onPressed: () {
+                context.getBloc<ProductDetailBloc>().add(
+                      OnTapAddProductToCartEvent(
+                        CartModel(
+                            productId: widget.product.id,
+                            productName: widget.product.name,
+                            productImage: widget.product.image,
+                            productPrice: widget.product.price,
+                            quantity: 1,
+                            size: state.selectedSize ??
+                                widget.product.sizes.first),
+                      ),
+                    );
+              },
             ),
           ),
         ],

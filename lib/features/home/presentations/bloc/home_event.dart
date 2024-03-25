@@ -9,7 +9,7 @@ class HomeEvent with _$HomeEvent {
   const factory HomeEvent.onTapToDetailProductEvent(ProductModel productModel) =
       OnTapToDetailProductEvent;
   const factory HomeEvent.onTapCategoryEvent(int cateId) = OnTapCategoryEvent;
-  const factory HomeEvent.onTapAddProductToCart(CartModel cart) =
+  const factory HomeEvent.onTapAddProductToCart(CartModel cartModel) =
       OnTapAddProductToCart;
   const factory HomeEvent.onTapSearchProductEvent(String textSearch) =
       OnTapSearchProductEvent;

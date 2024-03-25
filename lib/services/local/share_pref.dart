@@ -15,6 +15,7 @@ class SharedPrefs {
 
   static set token(String? token) =>
       _prefs.setString(accessTokenKey, token ?? '');
+      
   static removeSeason() {
     _prefs.remove(accessTokenKey);
   }

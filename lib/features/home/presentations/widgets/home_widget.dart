@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +9,7 @@ import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/promotion_model.dart';
 import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
 import 'package:nike_shoe_shop/gen/assets.gen.dart';
@@ -48,6 +48,17 @@ class _HomeWidgetState extends State<HomeWidget> {
     });
   }
 
+  void _onTapAddProductToCart(ProductModel product, BuildContext context) {
+    context.getBloc<HomeBloc>().add(OnTapAddProductToCart(CartModel(
+          productId: product.id,
+          quantity: 1,
+          size: product.sizes.first,
+          productName: product.name,
+          productImage: product.image,
+          productPrice: product.price,
+        )));
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -76,7 +87,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   AppBarCustom _buildAppBar() {
-    return AppBarCustom(
+    return const AppBarCustom(
       title: 'Mondolibug, Sylhet',
     );
   }
@@ -310,13 +321,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           title: product.orderCount > 500 ? 'Best Seller' : '',
           name: product.name,
           price: product.price.toString(),
-          onTapAddToCart: () {
-            context.read<HomeBloc>().add(OnTapAddProductToCart(CartModel(
-                  productId: product.id,
-                  quantity: 1,
-                  size: product.sizes.first,
-                )));
-          },
+          onTapAddToCart: () => _onTapAddProductToCart(product, context),
           onTapDetail: () {
             context.read<HomeBloc>().add(OnTapToDetailProductEvent(product));
           },
@@ -359,14 +364,9 @@ class _HomeWidgetState extends State<HomeWidget> {
                       AppStyle.regular12.copyWith(color: AppColor.primaryColor),
                 ),
                 SizedBox(height: 4.0.h),
-                Text(
-                  name ?? '--:--',
-                  overflow: TextOverflow.ellipsis,
-                  style: AppStyle.regular14.copyWith(
-                    color: AppColor.textColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                Text(name ?? '--:--',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppStyle.nameProductStyle),
                 SizedBox(height: 12.0.h),
                 Text(
                   '\$$price',
@@ -448,13 +448,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                 title: 'Best Seller',
                 name: product.name,
                 price: product.price.toString(),
-                onTapAddToCart: () {
-                  context.read<HomeBloc>().add(OnTapAddProductToCart(CartModel(
-                        productId: product.id,
-                        quantity: 1,
-                        size: product.sizes.first,
-                      )));
-                },
+                onTapAddToCart: () => _onTapAddProductToCart(product, context),
                 onTapDetail: () {
                   context
                       .read<HomeBloc>()

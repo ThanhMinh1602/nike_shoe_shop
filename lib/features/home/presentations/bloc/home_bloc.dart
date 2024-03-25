@@ -24,6 +24,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on(_onTapProductDetail);
     on(_onTapSearchProduct);
     on(_onTapLogOut);
+    on(_onAddToCart);
   }
 
   Future<void> _onInit(
@@ -75,5 +76,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       OnTapLogOutEvent event, Emitter<HomeState> emitter) async {
     await repository.logOut();
     appNavigator.pushAndRemoveUntil(screen: const ScreenType.login());
+  }
+
+  Future<void> _onAddToCart(
+      OnTapAddProductToCart event, Emitter<HomeState> emitter) async {
+    final int result = await repository.addProductToCart(event.cartModel);
+    if (result != 0) {
+      print('Product added to cart successfully!');
+    } else {
+      print('Failed to add product to cart.');
+    }
   }
 }

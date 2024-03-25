@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:nike_shoe_shop/common/constants/app_color.dart';
 
 class AppStyle {
   AppStyle._();
@@ -35,6 +36,11 @@ class AppStyle {
   static TextStyle regular14 = GoogleFonts.aBeeZee(
     fontSize: 14.sp,
     fontWeight: FontWeight.w500,
+  );
+  static TextStyle nameProductStyle = GoogleFonts.aBeeZee(
+    fontSize: 14.sp,
+    color: AppColor.textColor,
+    fontWeight: FontWeight.w600,
   );
   static TextStyle bold16 = GoogleFonts.aBeeZee(
     fontSize: 16.sp,
