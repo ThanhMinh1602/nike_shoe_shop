@@ -87,7 +87,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   AppBarCustom _buildAppBar() {
-    return const AppBarCustom(
+    return  AppBarCustom(
       title: 'Mondolibug, Sylhet',
     );
   }
@@ -323,7 +323,7 @@ class _HomeWidgetState extends State<HomeWidget> {
           price: product.price.toString(),
           onTapAddToCart: () => _onTapAddProductToCart(product, context),
           onTapDetail: () {
-            context.read<HomeBloc>().add(OnTapToDetailProductEvent(product));
+            context.getBloc<HomeBloc>().add(OnTapToDetailProductEvent(product));
           },
         );
       },
@@ -352,8 +352,7 @@ class _HomeWidgetState extends State<HomeWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.network(
-                  image ??
-                      'https://static.thenounproject.com/png/741653-200.png',
+                  image ?? '',
                   height: 97.h,
                   width: double.infinity,
                 ),

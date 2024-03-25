@@ -7,4 +7,5 @@ class CartEvent with _$CartEvent {
       RemoveProductFromCartEvent;
   const factory CartEvent.onChangeQuantityItemEvent(
       int productId, int quantity) = OnChangeQuantityItemEvent;
+  const factory CartEvent.calculateTotalPriceEvent( ) = CalculateTotalPriceEvent;
 }

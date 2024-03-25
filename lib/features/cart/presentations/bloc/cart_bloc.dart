@@ -15,6 +15,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on(_onInit);
     on(_onRemoveProductFromCart);
     on(_onChangeQuantity);
+    on(_onCalculateTotalPrice);
   }
 }
 
@@ -27,6 +28,7 @@ extension CartBlocExtension on CartBloc {
       isLoading: false,
       listCart: cartProducts,
     ));
+    add(const CalculateTotalPriceEvent());
   }
 
   Future<void> _onRemoveProductFromCart(
@@ -38,10 +40,24 @@ extension CartBlocExtension on CartBloc {
       isLoading: false,
       listCart: cartProducts,
     ));
+    add(const CalculateTotalPriceEvent());
   }
 
   Future<void> _onChangeQuantity(
       OnChangeQuantityItemEvent event, Emitter<CartState> emitter) async {
     await repository.changeQuantity(event.productId, event.quantity);
+    add(const CalculateTotalPriceEvent());
+  }
+
+  Future<void> _onCalculateTotalPrice(
+      CalculateTotalPriceEvent event, Emitter<CartState> emitter) async {
+    double totalPrice = 0;
+    int totalProduct = 0;
+    final List<CartModel> cartProducts = await repository.getCartProducts();
+    for (var cartItem in cartProducts) {
+      totalPrice += cartItem.productPrice * cartItem.quantity;
+      totalProduct += cartItem.quantity;
+    }
+    emitter(state.copyWith(totalPrice: totalPrice, totalProduct: totalProduct));
   }
 }

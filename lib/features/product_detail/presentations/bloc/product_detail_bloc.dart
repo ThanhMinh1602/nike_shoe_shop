@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
@@ -42,9 +43,9 @@ extension HandleEvent on ProductDetailBloc {
       Emitter<ProductDetailState> emitter) async {
     final int result = await repository.addProductToCart(event.cartModel);
     if (result != 0) {
-      print('Product added to cart successfully!');
+      EasyLoading.showSuccess('Product added to cart successfully!');
     } else {
-      print('Failed to add product to cart.');
+      EasyLoading.showError('Product added to cart failed!');
     }
   }
 }

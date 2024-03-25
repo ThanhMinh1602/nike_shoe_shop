@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
+import 'package:nike_shoe_shop/common/components/dialog/app_dialog.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
@@ -50,6 +51,8 @@ class _CartWidgetState extends State<CartWidget> {
           child: _buildListCart(state),
         ),
         _buildTotalPrice(
+          totalPrice: state.totalPrice.toString(),
+          totalProduct: state.totalProduct.toString(),
           onTapCheckout: () {},
         ),
       ],
@@ -105,9 +108,23 @@ class _CartWidgetState extends State<CartWidget> {
       itemBuilder: (context, index) {
         final cartProduct = state.listCart[index];
         return _buildCartItem(
-          onRemoveProduct: () => context
-              .getBloc<CartBloc>()
-              .add(RemoveProductFromCartEvent(cartProduct.productId)),
+          onRemoveProduct: () {
+            showDialog(
+              context: context,
+              builder: (_) {
+                return BlocProvider.value(
+                  value: BlocProvider.of<CartBloc>(context),
+                  child: AppDialog(
+                    title: 'Remove Product',
+                    content: 'Are you sure you want to remove this product?',
+                    onPressedYes: () => context
+                        .getBloc<CartBloc>()
+                        .add(RemoveProductFromCartEvent(cartProduct.productId)),
+                  ),
+                );
+              },
+            );
+          },
           maxVal: 100,
           minVal: 1,
           initVal: cartProduct.quantity,
@@ -160,7 +177,7 @@ class _CartWidgetState extends State<CartWidget> {
               SizedBox(height: 10.0.h),
               Text('\$ $price', style: AppStyle.nameProductStyle),
               SizedBox(height: 15.0.h),
-              InputQty(
+              InputQty.int(
                 maxVal: maxVal ?? 0,
                 minVal: minVal ?? 0,
                 initVal: initVal ?? 0,

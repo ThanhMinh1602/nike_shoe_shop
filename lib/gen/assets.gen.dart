@@ -35,6 +35,10 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/cart_nofound.png
+  AssetGenImage get cartNofound =>
+      const AssetGenImage('assets/images/cart_nofound.png');
+
   /// File path: assets/images/image_error.png
   AssetGenImage get imageError =>
       const AssetGenImage('assets/images/image_error.png');
@@ -56,8 +60,15 @@ class $AssetsImagesGen {
   String get onboardNike => 'assets/images/onboard_nike.svg';
 
   /// List of all assets
-  List<dynamic> get values =>
-      [imageError, nothingFound, onboard1, onboard2, onboard3, onboardNike];
+  List<dynamic> get values => [
+        cartNofound,
+        imageError,
+        nothingFound,
+        onboard1,
+        onboard2,
+        onboard3,
+        onboardNike
+      ];
 }
 
 class Assets {

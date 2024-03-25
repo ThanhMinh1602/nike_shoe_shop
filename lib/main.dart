@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/features/splash/presentations/page/splash_page.dart';
 import 'package:nike_shoe_shop/services/firebase_options.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return MaterialApp(
-          theme: ThemeData(colorSchemeSeed: Colors.amberAccent),
+          theme: ThemeData(colorSchemeSeed: AppColor.primaryColor),
           debugShowCheckedModeBanner: false,
           title: 'sneacker_shop',
           home: const SplashPage(),
