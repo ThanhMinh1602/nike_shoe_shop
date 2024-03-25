@@ -32,9 +32,9 @@ extension CartBlocExtension on CartBloc {
       RemoveProductFromCartEvent event, Emitter<CartState> emitter) async {
     emitter(state.copyWith(isLoading: true));
     await repository.removeProductFromCart(event.productId);
-    emitter(state.copyWith(isLoading: false));
     final List<CartModel> cartProducts = await repository.getCartProducts();
     emitter(state.copyWith(
+      isLoading: false,
       listCart: cartProducts,
     ));
   }

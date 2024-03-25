@@ -32,26 +32,28 @@ class _CartWidgetState extends State<CartWidget> {
         title: 'My Cart',
       ),
       body: BlocConsumer<CartBloc, CartState>(
-        listener: (context, state) {
-          if (state.isLoading) {
-            EasyLoading.show();
-          } else {
-            EasyLoading.dismiss();
-          }
-        },
+        listener: (context, state) {},
         builder: (context, state) {
-          return Column(
-            children: [
-              Expanded(
-                child: _buildListCart(state),
-              ),
-              _buildTotalPrice(
-                onTapCheckout: () {},
-              ),
-            ],
-          );
+          return state.listCart.isEmpty
+              ? const Center(
+                  child: Text('Cart is empty!'),
+                )
+              : _buildBodyCart(state);
         },
       ),
+    );
+  }
+
+  Column _buildBodyCart(CartState state) {
+    return Column(
+      children: [
+        Expanded(
+          child: _buildListCart(state),
+        ),
+        _buildTotalPrice(
+          onTapCheckout: () {},
+        ),
+      ],
     );
   }
 
@@ -106,7 +108,7 @@ class _CartWidgetState extends State<CartWidget> {
         return _buildCartItem(
           onRemoveProduct: () => context
               .getBloc<CartBloc>()
-              .add(RemoveProductFromCartEvent(cartProduct.id!)),
+              .add(RemoveProductFromCartEvent(cartProduct.productId)),
           maxVal: 100,
           minVal: 1,
           initVal: num.parse(cartProduct.quantity.toString()),

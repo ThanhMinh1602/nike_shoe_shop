@@ -12,7 +12,7 @@ class CartRepositoryImpl implements ICartRepository {
   }
 
   @override
-  Future<void> removeProductFromCart(int productId) {
-    return cartService.removeProductItem(productId);
+  Future<void> removeProductFromCart(int productId) async {
+    await cartService.removeProductItem(productId);
   }
 }

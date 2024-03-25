@@ -1,13 +1,12 @@
 import 'dart:async';
+import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-
 import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
 
 class CartService {
   static const _databaseName = 'nike_shoe_shop.db';
   static const _tableName = 'cart_items';
-
   static Database? _database;
 
   Future<Database?> get database async {
@@ -23,7 +22,7 @@ class CartService {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 6,
       onCreate: _createTable,
     );
   }
@@ -32,6 +31,7 @@ class CartService {
     await db.execute('''
       CREATE TABLE $_tableName (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        uID TEXT NOT NULL,
         productId INTEGER NOT NULL,
         productName TEXT NOT NULL,
         productImage TEXT NOT NULL,
@@ -43,54 +43,56 @@ class CartService {
   }
 
   Future<List<CartModel>> getCartItems() async {
+    String uID = SharedPrefs.token!;
     final db = await database;
-    final result = await db!.query(_tableName);
+    final result = await db!.query(
+      _tableName,
+      where: 'uID = ?',
+      whereArgs: [uID],
+      orderBy: 'id DESC',
+    );
     return result.map((e) => CartModel.fromJson(e)).toList();
   }
 
   Future<int> addItem(CartModel item) async {
+    String uID = SharedPrefs.token!;
     final db = await database;
     final existingProduct = await db!.query(
       _tableName,
-      where: 'productId = ?',
-      whereArgs: [item.productId],
+      where: 'productId = ? AND uID = ?',
+      whereArgs: [item.productId, uID],
     );
     if (existingProduct.isNotEmpty) {
-      // Sản phẩm đã tồn tại trong giỏ hàng, cập nhật quantity
       final currentQuantity = existingProduct[0]['quantity'] as int;
       return await db.update(
         _tableName,
         {'quantity': currentQuantity + 1},
-        where: 'productId = ?',
-        whereArgs: [item.productId],
+        where: 'productId = ? AND uID = ?',
+        whereArgs: [item.productId, uID],
       );
     } else {
-      // Sản phẩm chưa tồn tại trong giỏ hàng, thêm mới
-      return await db.insert(_tableName, item.toJson());
+      return await db.insert(_tableName, {...item.toJson(), 'uID': uID});
     }
   }
 
   Future<int> updateItemQuantity(int productId, int quantity) async {
+    String uID = SharedPrefs.token!;
     final db = await database;
     return await db!.update(
       _tableName,
       {'quantity': quantity},
-      where: 'productId = ?',
-      whereArgs: [productId],
+      where: 'productId = ? AND uID = ?',
+      whereArgs: [productId, uID],
     );
   }
 
   Future<int> removeProductItem(int productId) async {
+    String uID = SharedPrefs.token!;
     final db = await database;
     return await db!.delete(
       _tableName,
-      where: 'productId = ?',
-      whereArgs: [productId],
+      where: 'productId = ? AND uID = ?',
+      whereArgs: [productId, uID],
     );
-  }
-
-  Future<void> clearCart() async {
-    final db = await database;
-    await db!.delete(_tableName);
   }
 }

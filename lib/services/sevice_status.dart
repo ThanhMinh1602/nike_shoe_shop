@@ -5,4 +5,7 @@ enum SignupResult {
   invalidEmail,
 }
 
-enum SigninResult { success, failure }
+enum SigninResult {
+  success,
+  failure,
+}
