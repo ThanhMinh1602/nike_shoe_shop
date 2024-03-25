@@ -15,4 +15,9 @@ class CartRepositoryImpl implements ICartRepository {
   Future<void> removeProductFromCart(int productId) async {
     await cartService.removeProductItem(productId);
   }
+
+  @override
+  Future<void> changeQuantity(int productId, int quantity) async {
+    await cartService.updateItemQuantity(productId, quantity);
+  }
 }

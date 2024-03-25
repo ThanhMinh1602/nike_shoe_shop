@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:input_quantity/input_quantity.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
@@ -111,7 +110,13 @@ class _CartWidgetState extends State<CartWidget> {
               .add(RemoveProductFromCartEvent(cartProduct.productId)),
           maxVal: 100,
           minVal: 1,
-          initVal: num.parse(cartProduct.quantity.toString()),
+          initVal: cartProduct.quantity,
+          onQtyChanged: (quantityChanged) => context.getBloc<CartBloc>().add(
+                OnChangeQuantityItemEvent(
+                  cartProduct.productId,
+                  quantityChanged,
+                ),
+              ),
           name: cartProduct.productName,
           pathImage: cartProduct.productImage,
           price: cartProduct.productPrice.toString(),

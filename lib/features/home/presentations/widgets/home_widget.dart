@@ -312,7 +312,7 @@ class _HomeWidgetState extends State<HomeWidget> {
         crossAxisSpacing: 21.w,
         crossAxisCount: 2,
         mainAxisSpacing: 21.w,
-        mainAxisExtent: 212.h,
+        childAspectRatio: 0.65,
       ),
       itemBuilder: (context, index) {
         final product = state.searchProductsResult[index];
@@ -436,11 +436,10 @@ class _HomeWidgetState extends State<HomeWidget> {
                 ? state.bestSalerProducts.length
                 : 2,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisSpacing: 21.w,
-              crossAxisCount: 2,
-              mainAxisSpacing: 21.w,
-              mainAxisExtent: 212.h,
-            ),
+                crossAxisSpacing: 21.w,
+                crossAxisCount: 2,
+                mainAxisSpacing: 21.w,
+                childAspectRatio: 0.65),
             itemBuilder: (context, index) {
               final product = state.bestSalerProducts[index];
               return _buildPopolarItem(

@@ -14,6 +14,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }) : super(const CartInitialState()) {
     on(_onInit);
     on(_onRemoveProductFromCart);
+    on(_onChangeQuantity);
   }
 }
 
@@ -37,5 +38,10 @@ extension CartBlocExtension on CartBloc {
       isLoading: false,
       listCart: cartProducts,
     ));
+  }
+
+  Future<void> _onChangeQuantity(
+      OnChangeQuantityItemEvent event, Emitter<CartState> emitter) async {
+    await repository.changeQuantity(event.productId, event.quantity);
   }
 }
