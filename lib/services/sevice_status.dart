@@ -9,3 +9,8 @@ enum SigninResult {
   success,
   failure,
 }
+
+enum SendOrderStatus {
+  success,
+  failure,
+}

@@ -3,10 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
+import 'package:nike_shoe_shop/common/components/dialog/app_dialog.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
+import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
 import 'package:nike_shoe_shop/features/checkout/presentations/bloc/checkout_bloc.dart';
+import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/utils/validator.dart';
 
 class CheckoutWidget extends StatefulWidget {
@@ -29,6 +32,8 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
   }
 
   final _formKey = GlobalKey<FormState>();
+
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneNumberController = TextEditingController();
   final _addressController = TextEditingController();
@@ -55,7 +60,37 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                   totalPrice: widget.totalPrice.toString(),
                   totalProduct: widget.totalProduct.toString(),
                   onTapCheckout: () {
-                    if (_formKey.currentState!.validate()) {}
+                    if (_formKey.currentState!.validate()) {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AppDialog(
+                            title: 'Payment',
+                            content: 'Bạn có chắc chắn muốn đặt hàng không',
+                            onPressedYes: () => context
+                                .getBloc<CheckoutBloc>()
+                                .add(
+                                  OnTapPaymentEvent(
+                                    PaymentModel(
+                                      uId: SharedPrefs.token,
+                                      customerName: _nameController.text,
+                                      email: _emailController.text,
+                                      phoneNumber: _phoneNumberController.text,
+                                      address: _addressController.text,
+                                      note: _noteController.text,
+                                      cartData: state.listCart,
+                                      totalPrice: widget.totalPrice,
+                                      totalProduct: widget.totalProduct,
+                                      paymentMethod: 'Thanh toán khi nhận hàng',
+                                      paymentStatus: false,
+                                      createdAt: DateTime.now(),
+                                    ),
+                                  ),
+                                ),
+                          );
+                        },
+                      );
+                    }
                   }),
             ],
           ),
@@ -89,6 +124,13 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
             const Divider(),
             const SizedBox(height: 10),
             Text('Contact Information', style: AppStyle.regular14),
+            _buildContactItem(
+              controller: _nameController,
+              validator: Validator.checkIsEmpty,
+              icon: Icons.person_outline_rounded,
+              label: 'Name',
+              onPressedEdit: () {},
+            ),
             _buildContactItem(
               controller: _emailController,
               validator: Validator.checkEmail,
@@ -189,7 +231,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
           padding: EdgeInsets.all(10.0.h),
           margin: const EdgeInsets.only(right: 12.0),
           decoration: BoxDecoration(
-              color: AppColor.greyColor,
+              color: AppColor.greyColor300,
               borderRadius: BorderRadius.circular(12.0.r)),
           child: Icon(
             icon,

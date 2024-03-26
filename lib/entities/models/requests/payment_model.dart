@@ -1,56 +1,74 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
+
 class PaymentModel {
   final String? uId;
   final String? paymentId;
-  final String? totalPrice;
-  final String? totalProduct;
+  final List<CartModel> cartData;
+  final double? totalPrice;
+  final int? totalProduct;
+  final String? customerName;
   final String? email;
   final String? phoneNumber;
   final String? address;
   final String? note;
   final String? paymentMethod;
   final DateTime? createdAt;
+  final bool paymentStatus;
 
   PaymentModel({
     this.uId,
     this.paymentId,
+    required this.cartData,
+    this.totalPrice,
+    this.totalProduct,
+    this.customerName,
     this.email,
     this.phoneNumber,
     this.address,
     this.note,
     this.paymentMethod,
+    required this.paymentStatus,
     this.createdAt,
-    this.totalPrice,
-    this.totalProduct,
   });
 
-  factory PaymentModel.fromJson(Map<String, dynamic> json) {
+  factory PaymentModel.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data() as Map<String, dynamic>;
+    List<CartModel> cartData = (data['cartData'] as List)
+        .map((item) => CartModel.fromJson(item))
+        .toList();
     return PaymentModel(
-      uId: json['uId'],
-      paymentId: json['paymentId'],
-      email: json['email'],
-      phoneNumber: json['phoneNumber'],
-      address: json['address'],
-      note: json['note'],
-      paymentMethod: json['paymentMethod'],
-      createdAt:
-          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      totalPrice: json['totalPrice'],
-      totalProduct: json['totalProduct'],
+      uId: data['uId'],
+      paymentId: data['paymentId'],
+      cartData: cartData,
+      totalPrice: data['totalPrice'],
+      totalProduct: data['totalProduct'],
+      customerName: data['customerName'],
+      email: data['email'],
+      phoneNumber: data['phoneNumber'],
+      address: data['address'],
+      note: data['note'],
+      paymentMethod: data['paymentMethod'],
+      paymentStatus: data['paymentStatus'],
+      createdAt: data['createdAt']?.toDate(),
     );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['uId'] = uId;
-    data['paymentId'] = paymentId;
-    data['email'] = email;
-    data['phoneNumber'] = phoneNumber;
-    data['address'] = address;
-    data['note'] = note;
-    data['paymentMethod'] = paymentMethod;
-    data['createdAt'] = createdAt?.toIso8601String();
-    data['totalPrice'] = totalPrice;
-    data['totalProduct'] = totalProduct;
-    return data;
+    return {
+      'uId': uId,
+      'paymentId': paymentId,
+      'cartData': cartData.map((cart) => cart.toJson()).toList(),
+      'totalPrice': totalPrice,
+      'totalProduct': totalProduct,
+      'customerName': customerName,
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'address': address,
+      'note': note,
+      'paymentMethod': paymentMethod,
+      'paymentStatus': paymentStatus,
+      'createdAt': createdAt,
+    };
   }
 }

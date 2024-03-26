@@ -12,6 +12,7 @@ class CheckoutBloc extends Bloc<CheckoutEvent, CheckoutState> {
   final CheckoutRepositoryImpl repository;
   CheckoutBloc({required this.repository}) : super(const CheckoutState()) {
     on(_checkoutInitial);
+    on(_onSubmitPayment);
   }
 }
 
@@ -24,5 +25,15 @@ extension CheckoutBlocExtension on CheckoutBloc {
       isLoading: false,
       listCart: listCart,
     ));
+  }
+
+  Future<void> _onSubmitPayment(
+      OnTapPaymentEvent event, Emitter<CheckoutState> emitter) async {
+    emitter(state.copyWith(isLoading: true));
+    await repository.sendOrder(event.paymentModel);
+    emitter(state.copyWith(paymentSuccess: true, isLoading: false));
+    event.paymentModel.toJson().forEach((key, value) {
+      print('$key: $value');
+    });
   }
 }
