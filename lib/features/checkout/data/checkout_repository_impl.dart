@@ -19,4 +19,9 @@ class CheckoutRepositoryImpl implements ICheckoutRepository {
   Future<SendOrderStatus> sendOrder(PaymentModel paymentModel) async {
     return await checkoutService.sendOrder(paymentModel);
   }
+
+  @override
+  Future<void> clearCart() async {
+    await cartService.clearAllCart();
+  }
 }

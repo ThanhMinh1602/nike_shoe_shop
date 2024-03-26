@@ -1,12 +1,14 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
-import 'package:nike_shoe_shop/common/components/dialog/app_dialog.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
+import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
 import 'package:nike_shoe_shop/features/checkout/presentations/bloc/checkout_bloc.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
@@ -49,7 +51,35 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
 
   Widget _buildPaymentBody() {
     return BlocConsumer<CheckoutBloc, CheckoutState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.isLoading) {
+          EasyLoading.show();
+        } else {
+          EasyLoading.dismiss();
+        }
+        if (state.paymentSuccess) {
+          AwesomeDialog(
+            context: context,
+            animType: AnimType.leftSlide,
+            dismissOnTouchOutside: false,
+            dialogBorderRadius: BorderRadius.circular(20.0.r),
+            padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 25.w),
+            headerAnimationLoop: true,
+            dialogType: DialogType.success,
+            showCloseIcon: false,
+            desc: 'Your Payment Is Successful',
+            descTextStyle: AppStyle.regular20,
+            btnOk: AppButton(
+              buttonText: 'Back To Shopping',
+              onPressed: () {
+                context
+                    .getNavigator()
+                    .pushAndRemoveUntil(screen: const ScreenType.home());
+              },
+            ),
+          ).show();
+        }
+      },
       builder: (context, state) {
         return Form(
           key: _formKey,
@@ -61,35 +91,24 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                   totalProduct: widget.totalProduct.toString(),
                   onTapCheckout: () {
                     if (_formKey.currentState!.validate()) {
-                      showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AppDialog(
-                            title: 'Payment',
-                            content: 'Bạn có chắc chắn muốn đặt hàng không',
-                            onPressedYes: () => context
-                                .getBloc<CheckoutBloc>()
-                                .add(
-                                  OnTapPaymentEvent(
-                                    PaymentModel(
-                                      uId: SharedPrefs.token,
-                                      customerName: _nameController.text,
-                                      email: _emailController.text,
-                                      phoneNumber: _phoneNumberController.text,
-                                      address: _addressController.text,
-                                      note: _noteController.text,
-                                      cartData: state.listCart,
-                                      totalPrice: widget.totalPrice,
-                                      totalProduct: widget.totalProduct,
-                                      paymentMethod: 'Thanh toán khi nhận hàng',
-                                      paymentStatus: false,
-                                      createdAt: DateTime.now(),
-                                    ),
-                                  ),
-                                ),
+                      context.getBloc<CheckoutBloc>().add(
+                            OnTapPaymentEvent(
+                              PaymentModel(
+                                uId: SharedPrefs.token,
+                                customerName: _nameController.text,
+                                email: _emailController.text,
+                                phoneNumber: _phoneNumberController.text,
+                                address: _addressController.text,
+                                note: _noteController.text,
+                                cartData: state.listCart,
+                                totalPrice: widget.totalPrice,
+                                totalProduct: widget.totalProduct,
+                                paymentMethod: 'Thanh toán khi nhận hàng',
+                                paymentStatus: false,
+                                createdAt: DateTime.now(),
+                              ),
+                            ),
                           );
-                        },
-                      );
                     }
                   }),
             ],
@@ -266,6 +285,13 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
             : Expanded(
                 child: TextFormField(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
+                keyboardType: label == 'Phone Number'
+                    ? TextInputType.phone
+                    : label == 'Email'
+                        ? TextInputType.emailAddress
+                        : label == 'Name'
+                            ? TextInputType.name
+                            : TextInputType.streetAddress,
                 validator: validator,
                 style: AppStyle.regular12,
                 controller: controller,

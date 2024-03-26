@@ -44,7 +44,7 @@ class _CartWidgetState extends State<CartWidget> {
     );
   }
 
-  Column _buildBodyCart(CartState state) {
+  Widget _buildBodyCart(CartState state) {
     return Column(
       children: [
         Expanded(
@@ -112,20 +112,12 @@ class _CartWidgetState extends State<CartWidget> {
         final cartProduct = state.listCart[index];
         return _buildCartItem(
           onRemoveProduct: () {
-            showDialog(
-              context: context,
-              builder: (_) {
-                return BlocProvider.value(
-                  value: BlocProvider.of<CartBloc>(context),
-                  child: AppDialog(
-                    title: 'Remove Product',
-                    content: 'Are you sure you want to remove this product?',
-                    onPressedYes: () => context
-                        .getBloc<CartBloc>()
-                        .add(RemoveProductFromCartEvent(cartProduct.productId)),
-                  ),
-                );
-              },
+            AppDiaLog.showAwesomeDialog(
+              context,
+              content: 'Are you sure you want to remove this product?',
+              btnOkOnPress: () => context
+                  .getBloc<CartBloc>()
+                  .add(RemoveProductFromCartEvent(cartProduct.productId)),
             );
           },
           maxVal: 100,

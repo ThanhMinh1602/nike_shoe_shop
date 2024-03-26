@@ -71,11 +71,22 @@ class $AssetsImagesGen {
       ];
 }
 
+class $AssetsJsonsGen {
+  const $AssetsJsonsGen();
+
+  /// File path: assets/jsons/cart_isempty.json
+  String get cartIsempty => 'assets/jsons/cart_isempty.json';
+
+  /// List of all assets
+  List<String> get values => [cartIsempty];
+}
+
 class Assets {
   Assets._();
 
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsJsonsGen jsons = $AssetsJsonsGen();
 }
 
 class AssetGenImage {

@@ -95,4 +95,14 @@ class CartService {
       whereArgs: [productId, uID],
     );
   }
+
+  Future<int> clearAllCart() async {
+    String uID = SharedPrefs.token!;
+    final db = await database;
+    return await db!.delete(
+      _tableName,
+      where: 'uID = ?',
+      whereArgs: [uID],
+    );
+  }
 }

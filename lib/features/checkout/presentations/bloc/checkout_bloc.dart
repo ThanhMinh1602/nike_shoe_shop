@@ -31,9 +31,8 @@ extension CheckoutBlocExtension on CheckoutBloc {
       OnTapPaymentEvent event, Emitter<CheckoutState> emitter) async {
     emitter(state.copyWith(isLoading: true));
     await repository.sendOrder(event.paymentModel);
+    await repository.clearCart();
     emitter(state.copyWith(paymentSuccess: true, isLoading: false));
-    event.paymentModel.toJson().forEach((key, value) {
-      print('$key: $value');
-    });
+    emitter(state.copyWith(paymentSuccess: false));
   }
 }

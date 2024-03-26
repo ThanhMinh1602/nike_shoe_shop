@@ -8,6 +8,7 @@ class CheckoutService {
     final paymentsCollection = _firestore.collection('payments');
     try {
       final data = paymentModel.toJson();
+
       await paymentsCollection.add(data);
       return SendOrderStatus.success;
     } catch (e) {

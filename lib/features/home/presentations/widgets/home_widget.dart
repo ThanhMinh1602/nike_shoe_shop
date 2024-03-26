@@ -12,6 +12,7 @@ import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/promotion_model.dart';
 import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
+import 'package:nike_shoe_shop/features/home/presentations/widgets/side_bar_widget.dart';
 import 'package:nike_shoe_shop/gen/assets.gen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -66,28 +67,14 @@ class _HomeWidgetState extends State<HomeWidget> {
       child: Scaffold(
         backgroundColor: AppColor.backgroundColor,
         appBar: _buildAppBar(),
-        drawer: Drawer(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  context.getBloc<HomeBloc>().add(const OnTapLogOutEvent());
-                },
-                child: const Row(
-                  children: [Icon(Icons.logout_sharp), Text('Logout')],
-                ),
-              )
-            ],
-          ),
-        ),
+        drawer: const SideBarWidget(),
         body: _buildHomeBody(),
       ),
     );
   }
 
   AppBarCustom _buildAppBar() {
-    return  AppBarCustom(
+    return AppBarCustom(
       title: 'Mondolibug, Sylhet',
     );
   }

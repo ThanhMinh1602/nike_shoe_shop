@@ -1,40 +1,22 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
+import 'package:nike_shoe_shop/common/constants/app_style.dart';
 
-class AppDialog extends StatelessWidget {
-  const AppDialog({
-    super.key,
-    this.onPressedYes,
-    this.title,
-    this.content,
-  });
-  final VoidCallback? onPressedYes;
-  final String? title;
-  final String? content;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      title: Text(title ?? ''),
-      content: Text(content ?? ''),
-      actions: [
-        TextButton(
-          onPressed: () {
-            context.getNavigator().pop();
-          },
-          child: const Text('No'),
-        ),
-        TextButton(
-          onPressed: () {
-            onPressedYes!();
-            context.getNavigator().pop();
-          },
-          child: const Text('Yes'),
-        ),
-      ],
-    );
+class AppDiaLog {
+  static void showAwesomeDialog(BuildContext context,
+      {String? content, void Function()? btnOkOnPress}) {
+    AwesomeDialog(
+      context: context,
+      animType: AnimType.rightSlide,
+      dialogBorderRadius: BorderRadius.circular(20.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
+      headerAnimationLoop: true,
+      showCloseIcon: false,
+      desc: content,
+      dialogType: DialogType.noHeader,
+      descTextStyle: AppStyle.regular18,
+      btnOkOnPress: btnOkOnPress,
+      btnCancelOnPress: () {},
+    ).show();
   }
 }
