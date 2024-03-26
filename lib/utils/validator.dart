@@ -43,4 +43,15 @@ class Validator {
     }
     return null;
   }
+
+  static String? checkPhoneNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Phone number cannot be empty!';
+    }
+    bool phoneNumberIsValid = RegExp(r'^[0-9]{10,11}$').hasMatch(value);
+    if (!phoneNumberIsValid) {
+      return 'Invalid phone number!';
+    }
+    return null;
+  }
 }

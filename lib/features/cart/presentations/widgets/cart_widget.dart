@@ -53,7 +53,10 @@ class _CartWidgetState extends State<CartWidget> {
         _buildTotalPrice(
           totalPrice: state.totalPrice.toString(),
           totalProduct: state.totalProduct.toString(),
-          onTapCheckout: () {},
+          onTapCheckout: () => context.getBloc<CartBloc>().add(
+              OnTapCheckoutEvent(
+                  totalPrice: state.totalPrice ?? 0.0,
+                  totalProduct: state.totalProduct ?? 0)),
         ),
       ],
     );

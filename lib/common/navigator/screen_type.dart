@@ -9,6 +9,9 @@ class ScreenType with _$ScreenType {
   const factory ScreenType.productDetail(ProductModel productModel) =
       ScreenTypeProductDetail;
   const factory ScreenType.cart() = ScreenTypeCart;
+  const factory ScreenType.checkout(
+      {required int totalProduct,
+      required double totalPrice}) = ScreenTypeCheckout;
 }
 
 class ScreenTypeHelper {
@@ -21,6 +24,8 @@ class ScreenTypeHelper {
       productDetail: (productModel) =>
           ProductDetailPage(productModel: productModel),
       cart: () => const CartPage(),
+      checkout: (totalProduct, totalPrice) =>
+          CheckoutPage(totalPrice: totalPrice, totalProduct: totalProduct),
     );
   }
 }

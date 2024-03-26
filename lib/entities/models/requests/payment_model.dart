@@ -1,4 +1,4 @@
-class CheckoutModel {
+class PaymentModel {
   final String? uId;
   final String? paymentId;
   final String? totalPrice;
@@ -10,7 +10,7 @@ class CheckoutModel {
   final String? paymentMethod;
   final DateTime? createdAt;
 
-  CheckoutModel({
+  PaymentModel({
     this.uId,
     this.paymentId,
     this.email,
@@ -23,8 +23,8 @@ class CheckoutModel {
     this.totalProduct,
   });
 
-  factory CheckoutModel.fromJson(Map<String, dynamic> json) {
-    return CheckoutModel(
+  factory PaymentModel.fromJson(Map<String, dynamic> json) {
+    return PaymentModel(
       uId: json['uId'],
       paymentId: json['paymentId'],
       email: json['email'],
