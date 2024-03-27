@@ -12,7 +12,6 @@ class CheckoutService {
       await paymentsCollection.add(data);
       return SendOrderStatus.success;
     } catch (e) {
-      print(e);
       return SendOrderStatus.failure;
     }
   }

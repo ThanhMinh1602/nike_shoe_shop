@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
-import 'package:nike_shoe_shop/common/components/textfields/app_text_field_email.dart';
+import 'package:nike_shoe_shop/common/components/textfields/app_text_field.dart';
 import 'package:nike_shoe_shop/common/components/textfields/app_text_field_password.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
@@ -41,7 +41,8 @@ class SignUpWidget extends StatelessWidget {
               key: _formKey,
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 20).copyWith(
-                    top: MediaQuery.of(context).padding.top + 84.h, bottom: 20.h),
+                    top: MediaQuery.of(context).padding.top + 84.h,
+                    bottom: 20.h),
                 children: [
                   Center(
                       child: Text('Create Account',
@@ -119,16 +120,16 @@ class SignUpWidget extends StatelessWidget {
     );
   }
 
-  AppTextFieldEmail _buildEmailInput() {
-    return AppTextFieldEmail(
+  AppTextField _buildEmailInput() {
+    return AppTextField(
       validator: Validator.checkEmail,
       controller: _emailController,
       hintText: 'Enter your email',
     );
   }
 
-  AppTextFieldEmail _buildNameInput() {
-    return AppTextFieldEmail(
+  AppTextField _buildNameInput() {
+    return AppTextField(
       validator: Validator.checkIsEmpty,
       controller: _nameController,
       hintText: 'Enter your name',

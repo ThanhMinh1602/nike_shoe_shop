@@ -74,7 +74,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   AppBarCustom _buildAppBar() {
-    return AppBarCustom(
+    return const AppBarCustom(
       title: 'Mondolibug, Sylhet',
     );
   }
@@ -142,11 +142,7 @@ class _HomeWidgetState extends State<HomeWidget> {
   Widget _buildLoadingShimmer(HomeState state) {
     return Center(
       child: Shimmer(
-        gradient: LinearGradient(colors: [
-          AppColor.whiteColor,
-          AppColor.primaryColor.withOpacity(0.2),
-          AppColor.whiteColor,
-        ]),
+        gradient: AppColor.linerLoading,
         child: Column(
           children: [
             const SizedBox(height: 10.0),

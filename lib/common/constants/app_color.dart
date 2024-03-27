@@ -10,4 +10,9 @@ class AppColor {
   static const subTextColor = Color(0xFF707B81);
   static const greyColor = Color(0xFFB4B4B4);
   static const greyColor300 = Color.fromARGB(255, 241, 241, 241);
+  static const linerLoading = LinearGradient(colors: [
+    AppColor.whiteColor,
+    Color.fromARGB(45, 91, 158, 225),
+    AppColor.whiteColor,
+  ]);
 }

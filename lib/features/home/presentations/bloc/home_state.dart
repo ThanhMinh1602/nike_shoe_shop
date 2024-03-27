@@ -7,9 +7,10 @@ class HomeState with _$HomeState {
     @Default([]) List<ProductModel> bestSalerProducts,
     @Default([]) List<ProductModel> searchProductsResult,
     @Default([]) List<CategoryModel> categories,
-    ProductModel? newProduct,
     @Default(false) bool addProductToCartSuccess,
     @Default(false) bool? isLoadMorePopular,
     @Default(0) int selectedCategoryIndex,
+    ProductModel? newProduct,
+    UserModel? userModel,
   }) = HomeInitialState;
 }

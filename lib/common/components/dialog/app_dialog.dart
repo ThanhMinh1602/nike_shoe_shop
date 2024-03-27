@@ -16,7 +16,8 @@ class AppDiaLog {
       dialogType: DialogType.noHeader,
       descTextStyle: AppStyle.regular18,
       btnOkOnPress: btnOkOnPress,
-      btnCancelOnPress: () {},
+      btnCancelOnPress:
+          content == 'Update information successfully' ? null : () {},
     ).show();
   }
 }

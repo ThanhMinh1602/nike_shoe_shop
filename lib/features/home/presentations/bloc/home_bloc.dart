@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/features/home/data/home_repository_impl.dart';
@@ -31,16 +33,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _onInit(
       HomeInitialEvent event, Emitter<HomeState> emitter) async {
     emitter(const HomeInitialState(isLoading: true));
-    final List<CategoryModel> categories = await repository.allCategories();
-    final List<ProductModel> bestSalerProducts =
-        await repository.bestSalerProductByCategoryId(0);
-    final ProductModel newProduct = await repository.newProductByCategoryId(0);
+    final categories = await repository.allCategories();
+    final bestSalerProducts = await repository.bestSalerProductByCategoryId(0);
+    final newProduct = await repository.newProductByCategoryId(0);
+    final user = await repository.userData();
+
     emitter(state.copyWith(
-      isLoading: false,
-      categories: categories,
-      bestSalerProducts: bestSalerProducts,
-      newProduct: newProduct,
-    ));
+        isLoading: false,
+        categories: categories,
+        bestSalerProducts: bestSalerProducts,
+        newProduct: newProduct,
+        userModel: user));
   }
 
   Future<void> _onLoadMorePopular(

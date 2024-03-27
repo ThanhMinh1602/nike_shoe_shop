@@ -25,29 +25,30 @@ class SideBarWidget extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 32.h,
-                    backgroundImage: const NetworkImage(
-                        'https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-6/431383708_1764723'
-                        '513939252_1859462949660535609_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=5f2048&'
-                        '_nc_ohc=x4RlTU44o8gAX9jjRlY&_nc_ht=scontent.fdad1-4.fna&oh=00_AfAF15e5F'
-                        'Y8JPCAPRBT750Tc6RabL3NymI0-wewztMXomQ&oe=66070DE2'),
+                    backgroundImage:
+                        NetworkImage(state.userModel?.avatar ?? ''),
                   ),
                   SizedBox(height: 24.h),
                   Text('Hey, 👋',
                       style: AppStyle.regular14.copyWith(color: Colors.grey)),
                   SizedBox(height: 6.h),
-                  Text('Nguyễn Thanh Minh',
+                  Text(state.userModel?.name ?? '',
+                      textAlign: TextAlign.center,
                       style: AppStyle.regular20
                           .copyWith(fontWeight: FontWeight.bold)),
                   SizedBox(height: 50.0.h),
                   _buildSideBarItem(
                     label: 'Profile',
                     icon: Icons.person_outline_rounded,
+                    onTap: () => context
+                        .getNavigator()
+                        .push(screen: ScreenType.profile(state.userModel!)),
                   ),
                   SizedBox(height: 30.0.h),
                   _buildSideBarItem(
-                    label: 'Home Page',
-                    icon: Icons.home_outlined,
-                  ),
+                      label: 'Home Page',
+                      icon: Icons.home_outlined,
+                      onTap: () => context.getNavigator().pop()),
                   SizedBox(height: 30.0.h),
                   _buildSideBarItem(
                     label: 'My Cart',

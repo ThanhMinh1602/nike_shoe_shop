@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
-import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
 import 'package:nike_shoe_shop/features/cart/data/cart_repository_impl.dart';
 
 part 'cart_event.dart';
