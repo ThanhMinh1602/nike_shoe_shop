@@ -19,29 +19,50 @@ class ProfileService {
     }
   }
 
-  Future<void> updateUser(UserModel userModel) async {
-    try {
-      final queryData = _firestore.collection('users').doc(SharedPrefs.token);
-      queryData.update(userModel.toJson());
-    } catch (e) {
-      rethrow;
+  Future<void> updateUser(File? imageFile, UserModel? userModel) async {
+    if (imageFile == null || userModel == null) {
+      print('image file or usermodel null');
+      return;
     }
-  }
-
-  Future<void> uploadImageAndSaveToFirestore(File imageFile) async {
     try {
       final storage = FirebaseStorage.instance;
       String fileName = basename(imageFile.path);
-      final Reference ref = storage.ref().child('user_avatar/').child(fileName);
-      final UploadTask uploadTask = ref.putFile(imageFile);
-      final TaskSnapshot downloadUrl = await uploadTask;
-      final String url = await downloadUrl.ref.getDownloadURL();
-      final firestore = FirebaseFirestore.instance;
-      await firestore.collection('users').doc(SharedPrefs.token).set({
-        'profile_image': url,
+      String imagePath = 'user_avatar/${SharedPrefs.token!}/user_avatar';
+      final Reference ref = storage.ref().child(imagePath);
+      if (fileName.isNotEmpty) {
+        final UploadTask uploadTask = ref.putFile(imageFile);
+        final TaskSnapshot downloadUrl = await uploadTask;
+        final String imageUrl = await downloadUrl.ref.getDownloadURL();
+        await _updateUserWithAvatar(userModel, imageUrl);
+      } else {
+        await _updateUserWithoutAvatar(userModel);
+      }
+    } catch (e) {
+      print('uplaod error $e');
+    }
+  }
+
+  Future<void> _updateUserWithAvatar(
+      UserModel userModel, String imageUrl) async {
+    try {
+      final userDocRef = _firestore.collection('users').doc(SharedPrefs.token);
+      await userDocRef.update({
+        ...userModel.toJson(),
+        'avatar': imageUrl,
       });
     } catch (e) {
-      print('Error uploading image and saving to Firestore: $e');
+      print('rrror update user with avatar: $e');
+    }
+  }
+
+  Future<void> _updateUserWithoutAvatar(UserModel userModel) async {
+    try {
+      final userDocRef = _firestore.collection('users').doc(SharedPrefs.token);
+      await userDocRef.update({
+        ...userModel.toJson(),
+      });
+    } catch (e) {
+      print('error updating user without avatar: $e');
     }
   }
 }

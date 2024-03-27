@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
 import 'package:nike_shoe_shop/common/components/dialog/app_dialog.dart';
@@ -12,7 +15,9 @@ import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
+import 'package:nike_shoe_shop/features/profile/domain/usecase/profile_image_picker_usecase.dart';
 import 'package:nike_shoe_shop/features/profile/presentations/bloc/profile_bloc.dart';
+import 'package:nike_shoe_shop/gen/assets.gen.dart';
 import 'package:nike_shoe_shop/utils/validator.dart';
 
 class ProfileWidget extends StatefulWidget {
@@ -86,18 +91,31 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(10.0),
-                    child: CircleAvatar(
-                      radius: 50.h,
-                      backgroundImage:
-                          NetworkImage(widget.userModel.avatar ?? ''),
-                    ),
+                    child: state.imageFile != null
+                        ? CircleAvatar(
+                            radius: 50.h,
+                            backgroundImage:
+                                FileImage(state.imageFile ?? File('')))
+                        : state.userModel?.avatar == null
+                            ? CircleAvatar(
+                                radius: 50.h,
+                                backgroundImage:
+                                    AssetImage(Assets.images.imageError.path))
+                            : CircleAvatar(
+                                radius: 50.h,
+                                backgroundImage: NetworkImage(
+                                    state.userModel?.avatar ?? '')),
                   ),
                   Positioned(
                     bottom: 0.0,
                     left: 0.0,
                     right: 0.0,
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        context
+                            .getBloc<ProfileBloc>()
+                            .add(const OnTapPickImageEvent());
+                      },
                       child: const Icon(
                         Icons.add_a_photo,
                         color: AppColor.primaryColor,
@@ -146,12 +164,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   context.read<ProfileBloc>().add(
                         OnTapUpDateProfileEvent(
                           UserModel(
-                            avatar: '',
+                            avatar: state.userModel!.avatar,
                             name: _fullNameController.text,
                             email: _emailController.text,
                             password: _passwordController.text.trim(),
                             createdAt: DateTime.now(),
                           ),
+                          state.imageFile ?? File(''),
                         ),
                       );
                 }
