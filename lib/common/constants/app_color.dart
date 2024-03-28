@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
+  //Mobile
   static const primaryColor = Color(0xFF5B9EE1);
   static const backgroundColor = Color.fromARGB(255, 229, 241, 252);
   static const whiteColor = Colors.white;
@@ -15,4 +16,8 @@ class AppColor {
     Color.fromARGB(45, 91, 158, 225),
     AppColor.whiteColor,
   ]);
+
+  //web admin
+  static const adminBackgroundColor = Color.fromARGB(255, 230, 229, 229);
+  static const adminTextColor = Color(0xff262626);
 }

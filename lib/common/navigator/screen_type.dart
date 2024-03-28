@@ -2,6 +2,7 @@ part of 'navigator.dart';
 
 @freezed
 class ScreenType with _$ScreenType {
+  //mobile
   const factory ScreenType.splash() = ScreenTypeSplash;
   const factory ScreenType.login() = ScreenTypeLogin;
   const factory ScreenType.signup() = ScreenTypeSignup;
@@ -14,6 +15,9 @@ class ScreenType with _$ScreenType {
       required double totalPrice}) = ScreenTypeCheckout;
   const factory ScreenType.profile(UserModel userModel) = ScreenTypeProfile;
   const factory ScreenType.order() = ScreenTypeOrder;
+  //web admin
+  const factory ScreenType.adminLogin() = ScreenTypeAdminLogin;
+  const factory ScreenType.adminDashboard() = ScreenTypeAdminDashboard;
 }
 
 class ScreenTypeHelper {
@@ -32,6 +36,9 @@ class ScreenTypeHelper {
         userModel: userModel,
       ),
       order: () => const OrderPage(),
+      //admin
+      adminLogin: () => const AdminLoginPage(),
+      adminDashboard: () => const AdminDashboardPage(),
     );
   }
 }

@@ -35,6 +35,10 @@ class $AssetsIconsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/add_image.png
+  AssetGenImage get addImage =>
+      const AssetGenImage('assets/images/add_image.png');
+
   /// File path: assets/images/cart_nofound.png
   AssetGenImage get cartNofound =>
       const AssetGenImage('assets/images/cart_nofound.png');
@@ -61,6 +65,7 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<dynamic> get values => [
+        addImage,
         cartNofound,
         imageError,
         nothingFound,

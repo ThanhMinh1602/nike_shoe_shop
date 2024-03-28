@@ -42,6 +42,7 @@ class AuthService {
         email: loginRequest.email,
         password: loginRequest.password,
       );
+
       if (result.user != null) {
         return SigninResult.success;
       } else {

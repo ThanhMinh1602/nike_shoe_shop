@@ -10,11 +10,13 @@ class AppTextFieldPassword extends StatefulWidget {
     this.validator,
     this.hintText,
     this.fillColor = AppColor.whiteColor,
+    this.boderRadius = 50.0,
   });
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final String? hintText;
   final Color? fillColor;
+  final double? boderRadius;
   @override
   State<AppTextFieldPassword> createState() => _AppTextFieldEmailState();
 }
@@ -48,7 +50,7 @@ class _AppTextFieldEmailState extends State<AppTextFieldPassword> {
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(
-            Radius.circular(50.r),
+            Radius.circular(widget.boderRadius!.r),
           ),
         ),
       ),

@@ -5,6 +5,7 @@ import 'package:nike_shoe_shop/common/constants/app_color.dart';
 
 class AppStyle {
   AppStyle._();
+  //mobile
   static TextStyle regula28 = GoogleFonts.acme(
     fontSize: 28.sp,
     fontWeight: FontWeight.w400,
@@ -61,5 +62,31 @@ class AppStyle {
   static TextStyle categoryStyle = GoogleFonts.aBeeZee(
     fontSize: 10.sp,
     fontWeight: FontWeight.bold,
+  );
+  //web admin
+  static TextStyle adminSemibold22 = GoogleFonts.poppins(
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColor.adminTextColor,
+  );
+  static TextStyle adminLight16 = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w300,
+    color: AppColor.adminTextColor,
+  );
+  static TextStyle adminLight14 = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w300,
+    color: AppColor.adminTextColor,
+  );
+  static TextStyle adminMedium16 = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColor.adminTextColor,
+  );
+  static TextStyle adminMedium14 = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColor.adminTextColor,
   );
 }

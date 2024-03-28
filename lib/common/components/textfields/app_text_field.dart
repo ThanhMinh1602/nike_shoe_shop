@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 
 class AppTextField extends StatelessWidget {
-  const AppTextField({
-    super.key,
-    this.controller,
-    this.hintText,
-    this.validator,
-    this.fillColor = AppColor.whiteColor,
-    this.readOnly,
-  });
+  const AppTextField(
+      {super.key,
+      this.controller,
+      this.hintText,
+      this.validator,
+      this.fillColor = AppColor.whiteColor,
+      this.readOnly,
+      this.boderRadius = 50,
+      this.isInputSize = false});
   final TextEditingController? controller;
   final String? hintText;
   final String? Function(String?)? validator;
   final Color? fillColor;
   final bool? readOnly;
+  final double? boderRadius;
+  final bool isInputSize;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -24,6 +28,11 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       readOnly: readOnly ?? false,
       style: AppStyle.regular12,
+      inputFormatters: isInputSize
+          ? [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9,]+')),
+            ]
+          : null,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         errorStyle: TextStyle(
@@ -39,7 +48,7 @@ class AppTextField extends StatelessWidget {
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.all(
-            Radius.circular(50.r),
+            Radius.circular(boderRadius!.r),
           ),
         ),
       ),

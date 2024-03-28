@@ -54,4 +54,15 @@ class Validator {
     }
     return null;
   }
+
+  static String? checkNumber(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Number cannot be empty!';
+    }
+    bool numberIsValid = RegExp(r'^[0-9]+$').hasMatch(value);
+    if (!numberIsValid) {
+      return 'Invalid number!';
+    }
+    return null;
+  }
 }
