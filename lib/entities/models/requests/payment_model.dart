@@ -32,7 +32,7 @@ class PaymentModel {
     this.createdAt,
   });
 
-  factory PaymentModel.fromFirestore(DocumentSnapshot doc) {
+  factory PaymentModel.fromJson(DocumentSnapshot doc) {
     Map data = doc.data() as Map<String, dynamic>;
     List<CartModel> cartData = (data['cartData'] as List)
         .map((item) => CartModel.fromJson(item))

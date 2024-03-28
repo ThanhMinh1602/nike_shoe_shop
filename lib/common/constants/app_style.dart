@@ -34,7 +34,7 @@ class AppStyle {
     fontWeight: FontWeight.w400,
   );
   static TextStyle regular8 = GoogleFonts.aBeeZee(
-    fontSize: 10.sp,
+    fontSize: 7.sp,
     fontWeight: FontWeight.w400,
   );
   static TextStyle regular14 = GoogleFonts.aBeeZee(

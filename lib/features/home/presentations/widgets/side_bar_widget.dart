@@ -66,6 +66,9 @@ class SideBarWidget extends StatelessWidget {
                   _buildSideBarItem(
                     label: 'Order',
                     icon: Icons.local_shipping_outlined,
+                    onTap: () => context
+                        .getNavigator()
+                        .push(screen: const ScreenType.order()),
                   ),
                   SizedBox(height: 30.0.h),
                   _buildSideBarItem(

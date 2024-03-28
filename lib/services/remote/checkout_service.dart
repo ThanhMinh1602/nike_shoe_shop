@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
+import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/services/sevice_status.dart';
 
 class CheckoutService {
@@ -14,5 +16,16 @@ class CheckoutService {
     } catch (e) {
       return SendOrderStatus.failure;
     }
+  }
+
+  Future<List<PaymentModel>> getOderByUid() async {
+    final paymentsCollection = await _firestore
+        .collection('payments')
+        .where('uId', isEqualTo: SharedPrefs.token)
+        .get();
+    final data = paymentsCollection.docs
+        .map((doc) => PaymentModel.fromJson(doc))
+        .toList();
+    return data;
   }
 }

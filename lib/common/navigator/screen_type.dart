@@ -13,6 +13,7 @@ class ScreenType with _$ScreenType {
       {required int totalProduct,
       required double totalPrice}) = ScreenTypeCheckout;
   const factory ScreenType.profile(UserModel userModel) = ScreenTypeProfile;
+  const factory ScreenType.order() = ScreenTypeOrder;
 }
 
 class ScreenTypeHelper {
@@ -30,6 +31,7 @@ class ScreenTypeHelper {
       profile: (userModel) => ProfilePage(
         userModel: userModel,
       ),
+      order: () => const OrderPage(),
     );
   }
 }

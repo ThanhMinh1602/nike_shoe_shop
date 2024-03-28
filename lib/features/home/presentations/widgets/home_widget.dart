@@ -334,11 +334,13 @@ class _HomeWidgetState extends State<HomeWidget> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  image ?? '',
-                  height: 97.h,
-                  width: double.infinity,
-                ),
+                image == null
+                    ? Image.asset(Assets.images.imageError.path)
+                    : Image.network(
+                        image,
+                        height: 97.h,
+                        width: double.infinity,
+                      ),
                 SizedBox(height: 12.0.h),
                 Text(
                   title?.toUpperCase() ?? '--:--',

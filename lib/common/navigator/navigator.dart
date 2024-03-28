@@ -7,6 +7,7 @@ import 'package:nike_shoe_shop/features/auth/signup/presentations/page/signup_pa
 import 'package:nike_shoe_shop/features/cart/presentations/page/cart_page.dart';
 import 'package:nike_shoe_shop/features/checkout/presentations/page/checkout_page.dart';
 import 'package:nike_shoe_shop/features/home/presentations/page/home_page.dart';
+import 'package:nike_shoe_shop/features/order/presentations/page/oder_page.dart';
 import 'package:nike_shoe_shop/features/product_detail/presentations/page/product_detail_page.dart';
 import 'package:nike_shoe_shop/features/profile/presentations/page/profile_page.dart';
 import 'package:nike_shoe_shop/features/splash/presentations/page/splash_page.dart';

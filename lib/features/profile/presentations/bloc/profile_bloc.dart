@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
+import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
 import 'package:nike_shoe_shop/features/profile/data/profile_repository_impl.dart';
 import 'package:nike_shoe_shop/features/profile/domain/usecase/profile_image_picker_usecase.dart';
 part 'profile_event.dart';
