@@ -2,6 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/features/admin/ad_catergory/presentations/page/ad_category_page.dart';
+import 'package:nike_shoe_shop/features/admin/ad_home/presentations/page/ad_home_page.dart';
+import 'package:nike_shoe_shop/features/admin/ad_product/presentations/page/ad_product_page.dart';
 import 'package:nike_shoe_shop/features/user/auth/login/presentations/page/login_page.dart';
 import 'package:nike_shoe_shop/features/user/auth/signup/presentations/page/signup_page.dart';
 import 'package:nike_shoe_shop/features/user/cart/presentations/page/cart_page.dart';
@@ -11,9 +14,6 @@ import 'package:nike_shoe_shop/features/user/order/presentations/page/oder_page.
 import 'package:nike_shoe_shop/features/user/product_detail/presentations/page/product_detail_page.dart';
 import 'package:nike_shoe_shop/features/user/profile/presentations/page/profile_page.dart';
 import 'package:nike_shoe_shop/features/user/splash/presentations/page/splash_page.dart';
-import 'package:nike_shoe_shop/features/web_admin/admin_product/presentations/page/admin_product_page.dart';
-import 'package:nike_shoe_shop/features/web_admin/admin_dashboard/presentations/page/admin_dashboard_page.dart';
-import 'package:nike_shoe_shop/features/web_admin/admin_login/presentations/page/admin_login_page.dart';
 import 'package:page_transition/page_transition.dart';
 
 part 'screen_type.dart';

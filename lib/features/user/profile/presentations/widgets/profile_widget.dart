@@ -166,7 +166,6 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                             name: _fullNameController.text,
                             email: _emailController.text,
                             password: _passwordController.text.trim(),
-                            createdAt: DateTime.now(),
                           ),
                           state.imageFile ?? File(''),
                         ),

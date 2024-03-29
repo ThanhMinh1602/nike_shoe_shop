@@ -1,92 +1,179 @@
-// // import 'package:flutter/material.dart';
-// // import 'package:firebase_storage/firebase_storage.dart';
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/widgets.dart';
+import 'package:nike_shoe_shop/services/firebase_options.dart';
+import 'package:nike_shoe_shop/services/local/share_pref.dart';
 
-// // class ImageFromFirebaseStorage extends StatefulWidget {
-// //   @override
-// //   _ImageFromFirebaseStorageState createState() =>
-// //       _ImageFromFirebaseStorageState();
-// // }
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefs.initialise();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
-// // class _ImageFromFirebaseStorageState extends State<ImageFromFirebaseStorage> {
-// //   String imageUrl = ''; // Biến lưu trữ URL của hình ảnh
+class MyApp extends StatelessWidget {
+  final Future<FirebaseApp> _firebaseApp = Firebase.initializeApp();
 
-// //   @override
-// //   void initState() {
-// //     super.initState();
-// //     loadImage();
-// //   }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Upload to Firebase Storage',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: FutureBuilder(
+        future: _firebaseApp,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return UploadScreen();
+          }
+          return CircularProgressIndicator();
+        },
+      ),
+    );
+  }
+}
 
-// //   Future<void> loadImage() async {
-// //     try {
-// //       String url = await FirebaseStorage.instance
-// //           .ref()
-// //           .child(
-// //               '/products/adidas/adidas_0.jpg')
-// //           .getDownloadURL();
+class UploadScreen extends StatefulWidget {
+  @override
+  _UploadScreenState createState() => _UploadScreenState();
+}
 
-// //       setState(() {
-// //         imageUrl = url; // Lưu URL vào biến imageUrl
-// //       });
-// //     } catch (e) {
-// //       print('Error loading image from Firebase Storage: $e');
-// //     }
-// //   }
+class _UploadScreenState extends State<UploadScreen> {
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+  String? imageUrl;
+  bool isLoading = false;
 
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     print(imageUrl);
-// //     return Scaffold(
-// //       appBar: AppBar(
-// //         title: const Text('Image from Firebase Storage'),
-// //       ),
-// //       body: Center(
-// //         child: imageUrl != null
-// //             ? Image.network(imageUrl) // Hiển thị hình ảnh từ URL
-// //             : CircularProgressIndicator(), // Hiển thị indicator nếu hình ảnh chưa được tải
-// //       ),
-// //     );
-// //   }
-// // }
+  Future<String?> _uploadFile(html.File file) async {
+    try {
+      var storageRef = _storage.ref().child('images/${file.name}');
+      var uploadTask = storageRef.putBlob(file);
+      var snapshot = await uploadTask;
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Error uploading file: $e');
+      return null;
+    }
+  }
 
-// // void main() {
-// //   runApp(MaterialApp(
-// //     home: ImageFromFirebaseStorage(),
-// //   ));
-// // }
-// import 'package:cloud_firestore/cloud_firestore.dart';
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Upload Image'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                html.FileUploadInputElement uploadInput =
+                    html.FileUploadInputElement();
+                uploadInput.click();
+
+                uploadInput.onChange.listen((e) async {
+                  setState(() {
+                    isLoading = true;
+                  });
+                  final files = uploadInput.files;
+                  if (files?.length == 1) {
+                    var url = await _uploadFile(files![0]);
+                    setState(() {
+                      imageUrl = url;
+                      isLoading = false;
+                    });
+                  }
+                });
+              },
+              child: const Text('Select Image'),
+            ),
+            SizedBox(height: 20),
+            if (isLoading)
+              CircularProgressIndicator()
+            else if (imageUrl != null)
+              Text(imageUrl.toString())
+          ],
+        ),
+      ),
+    );
+  }
+}
+// import 'dart:html' as html;
+// import 'dart:typed_data';
 // import 'package:flutter/material.dart';
-// import 'package:nike_shoe_shop/entities/models/appmodels/category_model.dart';
-// import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 
-// class ImportDataScreen extends StatelessWidget {
-//   const ImportDataScreen({super.key});
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Upload to Firebase Storage',
+//       theme: ThemeData(
+//         primarySwatch: Colors.blue,
+//       ),
+//       home: UploadScreen(),
+//     );
+//   }
+// }
+
+// class UploadScreen extends StatefulWidget {
+//   @override
+//   _UploadScreenState createState() => _UploadScreenState();
+// }
+
+// class _UploadScreenState extends State<UploadScreen> {
+//   Uint8List? imageData;
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
 //       appBar: AppBar(
-//         title: const Text('Import Data to Firestore'),
+//         title: Text('Upload Image'),
 //       ),
 //       body: Center(
-//         child: ElevatedButton(
-//           onPressed: () async {
-//             // Get a Firestore instance
-//             FirebaseFirestore firestore = FirebaseFirestore.instance;
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             ElevatedButton(
+//               onPressed: () {
+//                 html.FileUploadInputElement uploadInput =
+//                     html.FileUploadInputElement();
+//                 uploadInput.click();
 
-//             // Loop through the products list and add each product to Firestore
-//             for (CategoryModel category in categories) {
-//               await firestore.collection('categories').add(category.toJson());
-//             }
-
-//             // Show a snackbar to indicate that the data has been imported
-//             // ignore: use_build_context_synchronously
-//             ScaffoldMessenger.of(context).showSnackBar(
-//               const SnackBar(
-//                 content: Text('Data imported to Firestore successfully!'),
-//               ),
-//             );
-//           },
-//           child: const Text('Import Data'),
+//                 uploadInput.onChange.listen((e) async {
+//                   final files = uploadInput.files;
+//                   if (files != null && files.length == 1) {
+//                     final reader = html.FileReader();
+//                     reader.readAsArrayBuffer(files[0]);
+//                     reader.onLoad.listen((event) {
+//                       setState(() {
+//                         imageData =
+//                             Uint8List.fromList(reader.result as List<int>);
+//                       });
+//                     });
+//                   }
+//                 });
+//               },
+//               child: const Text('Select Image'),
+//             ),
+//             SizedBox(height: 20),
+//             if (imageData != null)
+//               Image.memory(
+//                 imageData!,
+//                 width: 300,
+//                 height: 300,
+//               )
+//           ],
 //         ),
 //       ),
 //     );

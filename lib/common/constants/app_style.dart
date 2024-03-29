@@ -64,6 +64,11 @@ class AppStyle {
     fontWeight: FontWeight.bold,
   );
   //web admin
+  static TextStyle adminSemibold14 = GoogleFonts.poppins(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColor.adminTextColor,
+  );
   static TextStyle adminSemibold22 = GoogleFonts.poppins(
     fontSize: 22.sp,
     fontWeight: FontWeight.w600,
@@ -74,8 +79,8 @@ class AppStyle {
     fontWeight: FontWeight.w300,
     color: AppColor.adminTextColor,
   );
-  static TextStyle adminLight14 = GoogleFonts.poppins(
-    fontSize: 14.sp,
+  static TextStyle adminLight10 = GoogleFonts.poppins(
+    fontSize: 10.sp,
     fontWeight: FontWeight.w300,
     color: AppColor.adminTextColor,
   );

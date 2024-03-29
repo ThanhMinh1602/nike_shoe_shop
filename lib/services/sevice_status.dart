@@ -6,7 +6,8 @@ enum SignupResult {
 }
 
 enum SigninResult {
-  success,
+  successIsUser,
+  successIsAdmin,
   failure,
 }
 

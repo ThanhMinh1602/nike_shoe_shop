@@ -51,7 +51,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   void _onTapAddProductToCart(ProductModel product, BuildContext context) {
     context.getBloc<HomeBloc>().add(OnTapAddProductToCart(CartModel(
-          productId: product.id,
+          productId: int.parse(product.id),
           quantity: 1,
           size: product.sizes.first,
           productName: product.name,

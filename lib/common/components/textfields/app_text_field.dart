@@ -13,7 +13,8 @@ class AppTextField extends StatelessWidget {
       this.fillColor = AppColor.whiteColor,
       this.readOnly,
       this.boderRadius = 50,
-      this.isInputSize = false});
+      this.isInputSize = false,
+      this.keyboardType});
   final TextEditingController? controller;
   final String? hintText;
   final String? Function(String?)? validator;
@@ -21,11 +22,13 @@ class AppTextField extends StatelessWidget {
   final bool? readOnly;
   final double? boderRadius;
   final bool isInputSize;
+  final TextInputType? keyboardType;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       validator: validator,
       controller: controller,
+      keyboardType: keyboardType,
       readOnly: readOnly ?? false,
       style: AppStyle.regular12,
       inputFormatters: isInputSize

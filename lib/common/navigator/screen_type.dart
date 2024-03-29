@@ -16,8 +16,9 @@ class ScreenType with _$ScreenType {
   const factory ScreenType.profile(UserModel userModel) = ScreenTypeProfile;
   const factory ScreenType.order() = ScreenTypeOrder;
   //web admin
-  const factory ScreenType.adminLogin() = ScreenTypeAdminLogin;
-  const factory ScreenType.adminDashboard() = ScreenTypeAdminDashboard;
+  const factory ScreenType.adminHome() = ScreenTypeAdHome;
+  const factory ScreenType.adminProduct() = ScreenTypeAdProduct;
+  const factory ScreenType.adminCategory() = ScreenTypeAdCategory;
 }
 
 class ScreenTypeHelper {
@@ -36,9 +37,9 @@ class ScreenTypeHelper {
         userModel: userModel,
       ),
       order: () => const OrderPage(),
-      //admin
-      adminLogin: () => const AdminLoginPage(),
-      adminDashboard: () => const AdminDashboardPage(),
+      adminHome: () => const AdHomePage(),
+      adminProduct: () => const AdProductPage(),
+      adminCategory: () => const AdCategoryPage(),
     );
   }
 }

@@ -9,8 +9,10 @@ class HomeService {
 
   Future<List<CategoryModel>> fetchCategories() async {
     try {
-      final querySnapshot =
-          await _firestore.collection('categories').orderBy('id').get();
+      final querySnapshot = await _firestore
+          .collection('categories')
+          .orderBy('createAt', descending: true)
+          .get();
       return querySnapshot.docs
           .map((doc) => CategoryModel.fromJson(doc.data()))
           .toList();

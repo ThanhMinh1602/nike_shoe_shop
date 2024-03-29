@@ -35,10 +35,11 @@ extension LoginBlocExtension on LoginBloc {
     emit(state.copyWith(isLoading: true));
     final result = await authService.signInWithEmail(event.loginRequest);
     emit(state.copyWith(isLoading: false));
-    if (result == SigninResult.success) {
+    if (result == SigninResult.successIsUser) {
       await setTokenUseCase();
       appNavigator.pushAndRemoveUntil(screen: const ScreenType.home());
-      EasyLoading.showSuccess('Sign in success');
+    } else if (result == SigninResult.successIsAdmin) {
+      appNavigator.pushAndRemoveUntil(screen: const ScreenType.adminHome());
     } else {
       EasyLoading.showError('Email or password is incorrect');
     }

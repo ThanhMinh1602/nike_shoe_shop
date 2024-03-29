@@ -204,7 +204,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 context.getBloc<ProductDetailBloc>().add(
                       OnTapAddProductToCartEvent(
                         CartModel(
-                            productId: widget.product.id,
+                            productId: int.parse(widget.product.id),
                             productName: widget.product.name,
                             productImage: widget.product.image,
                             productPrice: widget.product.price,

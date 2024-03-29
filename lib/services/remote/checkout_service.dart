@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/services/sevice_status.dart';
 

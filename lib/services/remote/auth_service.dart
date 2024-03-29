@@ -24,8 +24,7 @@ class AuthService {
           email: signupRequest.email,
           password: signupRequest.password,
           avatar: 'https://avatar-management.services.atlassian.com/default/16',
-          name: signupRequest.name,
-          createdAt: DateTime.now());
+          name: signupRequest.name);
       await FirebaseFirestore.instance
           .collection('users')
           .doc(uid)
@@ -36,15 +35,28 @@ class AuthService {
     }
   }
 
+  Future<bool> checkAdmin(String email) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('admin_accounts')
+        .where('email', isEqualTo: email)
+        .get();
+    return querySnapshot.docs.isNotEmpty;
+  }
+
   Future<SigninResult> signInWithEmail(LoginRequest loginRequest) async {
     try {
+      final isAdmin = await checkAdmin(loginRequest.email);
       final result = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: loginRequest.email,
         password: loginRequest.password,
       );
 
       if (result.user != null) {
-        return SigninResult.success;
+        if (isAdmin) {
+          return SigninResult.successIsAdmin;
+        } else {
+          return SigninResult.successIsUser;
+        }
       } else {
         return SigninResult.failure;
       }
