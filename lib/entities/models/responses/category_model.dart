@@ -1,16 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CategoryModel {
-  final String id;
-  final String name;
+  final String? id;
+  final String? name;
   final dynamic image;
-  final Timestamp? createAt;
+  final Timestamp createAt;
 
   CategoryModel({
     required this.id,
     required this.name,
     required this.image,
-    this.createAt,
+    required this.createAt,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {
@@ -26,7 +26,7 @@ class CategoryModel {
       'id': id,
       'name': name,
       'image': image,
-      'createAt': Timestamp.now(),
+      'createAt': createAt,
     };
   }
 }

@@ -112,7 +112,7 @@ class _CartWidgetState extends State<CartWidget> {
         final cartProduct = state.listCart[index];
         return _buildCartItem(
           onRemoveProduct: () {
-            AppDiaLog.showAwesomeDialog(
+            AppDiaLog.showAwesomeSuccessDialog(
               context,
               content: 'Are you sure you want to remove this product?',
               btnOkOnPress: () => context

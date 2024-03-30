@@ -4,9 +4,13 @@ part of 'ad_product_bloc.dart';
 class AdProductState with _$AdProductState {
   const factory AdProductState({
     @Default(false) bool isLoading,
-    CategoryModel? categoryModel,
     @Default(false) bool addNewProductSuccess,
+    @Default(false) bool updateProductSuccess,
+    @Default(false) bool deleteProductSuccess,
     @Default([]) List<CategoryModel> categories,
-    File? imageFile,
+    @Default([]) List<ProductModel> products,
+    CategoryModel? categoryModel,
+    File? imageFileUpload,
+    File? imageFileEdit,
   }) = _AdProductState;
 }

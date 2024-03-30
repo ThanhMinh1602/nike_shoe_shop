@@ -51,7 +51,7 @@ class _HomeWidgetState extends State<HomeWidget> {
 
   void _onTapAddProductToCart(ProductModel product, BuildContext context) {
     context.getBloc<HomeBloc>().add(OnTapAddProductToCart(CartModel(
-          productId: int.parse(product.id),
+          productId: product.id,
           quantity: 1,
           size: product.sizes.first,
           productName: product.name,
@@ -219,10 +219,12 @@ class _HomeWidgetState extends State<HomeWidget> {
         scrollDirection: Axis.horizontal,
         itemCount: state.categories.length,
         itemBuilder: (context, index) {
-          final isSelected = state.selectedCategoryIndex == index;
+          final isSelected = (state.cateId == state.categories[index].id);
           return GestureDetector(
             onTap: () {
-              context.read<HomeBloc>().add(OnTapCategoryEvent(index));
+              context
+                  .getBloc<HomeBloc>()
+                  .add(OnTapCategoryEvent(state.categories[index].id!));
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 300),
@@ -244,7 +246,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                     backgroundColor: AppColor.whiteColor,
                     child: Padding(
                       padding: EdgeInsets.all(6.0.w),
-                      child: SvgPicture.asset(
+                      child: Image.network(
                         state.categories[index].image,
                         width: isSelected ? 20.0.w : 26.0.w,
                         // ignore: deprecated_member_use
@@ -255,7 +257,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   if (isSelected) SizedBox(width: 3.0.w),
                   if (isSelected)
                     Text(
-                      state.categories[index].name.toUpperCase(),
+                      state.categories[index].name!.toUpperCase(),
                       style: AppStyle.categoryStyle.copyWith(
                         color: AppColor.whiteColor,
                       ),

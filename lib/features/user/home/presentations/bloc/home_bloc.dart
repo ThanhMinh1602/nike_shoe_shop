@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
@@ -34,8 +33,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeInitialEvent event, Emitter<HomeState> emitter) async {
     emitter(const HomeInitialState(isLoading: true));
     final categories = await repository.allCategories();
-    final bestSalerProducts = await repository.bestSalerProductByCategoryId(0);
-    final newProduct = await repository.newProductByCategoryId(0);
+    final bestSalerProducts =
+        await repository.bestSalerProductByCategoryId(categories[0].id!);
+    final newProduct =
+        await repository.newProductByCategoryId(categories[0].id!);
     final user = await repository.userData();
 
     emitter(state.copyWith(
@@ -58,7 +59,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final ProductModel newProduct =
         await repository.newProductByCategoryId(event.cateId);
     emitter(state.copyWith(
-      selectedCategoryIndex: event.cateId,
+      cateId: event.cateId,
       bestSalerProducts: products,
       newProduct: newProduct,
     ));

@@ -32,7 +32,7 @@ class CartService {
       CREATE TABLE $_tableName (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         uID TEXT NOT NULL,
-        productId INTEGER NOT NULL,
+        productId TEXT NOT NULL,
         productName TEXT NOT NULL,
         productImage TEXT NOT NULL,
         productPrice REAL NOT NULL,
@@ -75,7 +75,7 @@ class CartService {
     }
   }
 
-  Future<int> updateItemQuantity(int productId, int quantity) async {
+  Future<int> updateItemQuantity(String productId, int quantity) async {
     String uID = SharedPrefs.token!;
     final db = await database;
     return await db!.update(
@@ -86,12 +86,12 @@ class CartService {
     );
   }
 
-  Future<int> removeProductItem(int productId) async {
+  Future<int> removeProductItem(String productId) async {
     String uID = SharedPrefs.token!;
     final db = await database;
     return await db!.delete(
       _tableName,
-      where: 'productId = ? AND uID = ?',
+      where: 'productId = ? AND uID = ?', 
       whereArgs: [productId, uID],
     );
   }

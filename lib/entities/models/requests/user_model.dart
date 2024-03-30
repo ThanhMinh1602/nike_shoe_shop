@@ -21,7 +21,7 @@ class UserModel {
       email: json['email'],
       password: json['password'],
       avatar: json['avatar'],
-      createdAt: json['createdAt']!.toDate(),
+      createdAt: json['createdAt'],
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/requests/add_product_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
+import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/features/admin/ad_product/data/product_repository_impl.dart';
 import 'package:nike_shoe_shop/features/admin/ad_product/domain/usecase/ad_image_picker_usecase.dart';
 
@@ -25,6 +26,7 @@ class AdProductBloc extends Bloc<AdProductEvent, AdProductState> {
     on(_onPickImage);
     on(_onSelectCategory);
     on(_onSubmitProduct);
+    on(_onDeleteProduct);
     add(const ProductInitialEvent());
   }
 }
@@ -35,7 +37,12 @@ extension AdProductBlocExtension on AdProductBloc {
     try {
       emitter(state.copyWith(isLoading: true));
       final categories = await repository.getAllCategory();
-      emitter(state.copyWith(categories: categories, isLoading: false));
+      final products = await repository.getAllProduct();
+      emitter(state.copyWith(
+        categories: categories,
+        products: products,
+        isLoading: false,
+      ));
       if (categories.isNotEmpty) {
         add(AdOnSelectCategoryEvent(categories[0]));
       }
@@ -47,13 +54,17 @@ extension AdProductBlocExtension on AdProductBloc {
 
   Future<void> _onSelectCategory(
       AdOnSelectCategoryEvent event, Emitter<AdProductState> emitter) async {
-    emitter(state.copyWith(categoryModel: event.categoryModel));
+    emitter(state.copyWith(
+      categoryModel: event.categoryModel,
+    ));
   }
 
   Future<void> _onPickImage(
       AdImagePickerEventEvent event, Emitter<AdProductState> emitter) async {
     final imageFile = await adImagePickerUseCase();
-    emitter(state.copyWith(imageFile: imageFile));
+    emitter(state.copyWith(
+      imageFileUpload: imageFile,
+    ));
   }
 
   Future<void> _onSubmitProduct(
@@ -61,7 +72,20 @@ extension AdProductBlocExtension on AdProductBloc {
     emitter(state.copyWith(isLoading: true));
     await repository.addNewProduct(event.addProductModel);
     emitter(state.copyWith(
-        isLoading: false, addNewProductSuccess: true, imageFile: null));
-    emitter(state.copyWith(isLoading: false, addNewProductSuccess: false));
+      isLoading: false,
+      imageFileUpload: null,
+    ));
+    appNavigator.pop();
+    add(const ProductInitialEvent());
+  }
+
+  Future<void> _onDeleteProduct(
+      AdDeleteProductEvent event, Emitter<AdProductState> emitter) async {
+    emitter(state.copyWith(isLoading: true));
+    await repository.deleteProduct(event.idProduct);
+    emitter(state.copyWith(
+      isLoading: false,
+    ));
+    add(const ProductInitialEvent());
   }
 }

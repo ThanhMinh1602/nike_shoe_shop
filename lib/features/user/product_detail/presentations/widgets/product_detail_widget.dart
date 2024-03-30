@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
@@ -58,11 +59,13 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
   Widget _buildProductImage() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-      child: Image.network(
-        widget.product.image,
-        fit: BoxFit.fitHeight,
-        width: double.infinity,
-        height: 202.h,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24.0.r),
+        child: Image.network(
+          widget.product.image,
+          fit: BoxFit.fitHeight,
+          width: double.infinity,
+        ),
       ),
     );
   }
@@ -156,11 +159,14 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         Text('Size',
             style: AppStyle.regular14.copyWith(fontWeight: FontWeight.w700)),
         const SizedBox(height: 16.0),
-        Row(
-          children: List.generate(
-            size.length,
-            (index) => Expanded(
-              child: GestureDetector(
+        SizedBox(
+          height: 32.w,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: size.length,
+            separatorBuilder: (context, index) => const SizedBox(width: 8.0),
+            itemBuilder: (context, index) {
+              return GestureDetector(
                 onTap: () => context
                     .getBloc<ProductDetailBloc>()
                     .add(OnTapSelectSizeEvent(widget.product.sizes[index])),
@@ -178,10 +184,10 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
-        ),
+        )
       ],
     );
   }
@@ -204,7 +210,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                 context.getBloc<ProductDetailBloc>().add(
                       OnTapAddProductToCartEvent(
                         CartModel(
-                            productId: int.parse(widget.product.id),
+                            productId: widget.product.id,
                             productName: widget.product.name,
                             productImage: widget.product.image,
                             productPrice: widget.product.price,

@@ -82,9 +82,13 @@ class LoginWidget extends StatelessWidget {
       buttonText: 'Login',
       onPressed: () {
         if (_formKey.currentState!.validate()) {
-          context.getBloc<LoginBloc>().add(OnTapLoginEvent(LoginRequest(
-              email: _emailController.text,
-              password: _passwordController.text)));
+          context.getBloc<LoginBloc>().add(
+                OnTapLoginEvent(
+                  LoginRequest(
+                      email: _emailController.text,
+                      password: _passwordController.text),
+                ),
+              );
         }
       },
     );

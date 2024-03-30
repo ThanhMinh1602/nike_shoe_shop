@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
@@ -37,6 +36,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'sneacker_shop',
           home: const AdHomePage(),
+          // home: const SplashPage(),
           builder: EasyLoading.init(),
         );
       },

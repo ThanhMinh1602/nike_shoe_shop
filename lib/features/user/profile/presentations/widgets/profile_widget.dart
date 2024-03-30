@@ -49,7 +49,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       body: BlocConsumer<ProfileBloc, ProfileState>(
         listener: (context, state) {
           if (state.updateProfileSuccess) {
-            AppDiaLog.showAwesomeDialog(
+            AppDiaLog.showAwesomeSuccessDialog(
               context,
               btnOkOnPress: () {
                 context.getNavigator().pushAndRemoveUntil(
@@ -93,7 +93,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                         ? CircleAvatar(
                             radius: 50.h,
                             backgroundImage:
-                                FileImage(state.imageFile ?? File('')))
+                                FileImage(state.imageFile!))
                         : state.userModel?.avatar == null
                             ? CircleAvatar(
                                 radius: 50.h,

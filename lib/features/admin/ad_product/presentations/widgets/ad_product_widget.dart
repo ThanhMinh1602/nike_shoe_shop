@@ -10,19 +10,29 @@ import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/entities/models/requests/add_product_model.dart';
 import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
+import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/features/admin/ad_product/presentations/bloc/ad_product_bloc.dart';
 import 'package:nike_shoe_shop/utils/validator.dart';
 
-// ignore: must_be_immutable
 class AdProductWidget extends StatelessWidget {
-  AdProductWidget({super.key});
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController priceController = TextEditingController();
-  final TextEditingController quantityController = TextEditingController();
-  final TextEditingController minSizeController = TextEditingController();
-  final TextEditingController maxSizeController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  AdProductWidget({Key? key}) : super(key: key);
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _minSizeController = TextEditingController();
+  final TextEditingController _maxSizeController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  void _showDeleteProductDialog(BuildContext context, String productId) {
+    AppDiaLog.showAwesomeConfirmDialog(
+      context,
+      content: 'Do you want to delete this product?',
+      btnOkOnPress: () {
+        context.getBloc<AdProductBloc>().add(AdDeleteProductEvent(productId));
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,30 +48,41 @@ class AdProductWidget extends StatelessWidget {
           } else {
             EasyLoading.dismiss();
           }
-          if (state.addNewProductSuccess) {
-            AppDiaLog.showAwesomeDialog(
-              context,
-              content: 'Add product success',
-              btnOkOnPress: () => context.getNavigator().pop(),
-            );
-            nameController.clear();
-            descriptionController.clear();
-            maxSizeController.clear();
-            minSizeController.clear();
-            quantityController.clear();
-            priceController.clear();
-          }
         },
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(
-              top: 20.0,
-            ),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
               children: [
+                Text(
+                  'Product list',
+                  style:
+                      AppStyle.regular20.copyWith(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20.h),
+                Expanded(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColor.greyColor),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      itemCount: state.products.length,
+                      separatorBuilder: (_, __) =>
+                          const Divider(indent: 0, endIndent: 0),
+                      itemBuilder: (context, index) {
+                        return _buildProductListItem(
+                            context, state.products[index], index);
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 AppButton(
                   buttonText: 'Add new product',
-                  minimumSize: Size(100.0.h, 30.0.h),
+                  minimumSize: Size(double.infinity, 30.0.h),
+                  boderRadius: 10.0,
                   onPressed: () {
                     showDialog(
                       context: context,
@@ -69,12 +90,50 @@ class AdProductWidget extends StatelessWidget {
                         return _formAddNewProduct(context);
                       },
                     );
+                    _nameController.clear();
+                    _descriptionController.clear();
+                    _maxSizeController.clear();
+                    _minSizeController.clear();
+                    _quantityController.clear();
+                    _priceController.clear();
                   },
-                )
+                ),
               ],
             ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildProductListItem(
+      BuildContext context, ProductModel product, int index) {
+    return GestureDetector(
+      onTap: () => _formAddNewProduct(context),
+      child: ListTile(
+        leading: Text('${index + 1}', style: AppStyle.regular12),
+        title: Row(
+          children: [
+            Image.network(
+              product.image,
+              width: 30.0,
+            ),
+            const SizedBox(width: 20.0),
+            Expanded(
+              child: Text(
+                product.name.toUpperCase(),
+                style: AppStyle.regular12,
+              ),
+            ),
+          ],
+        ),
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.delete_outline,
+            color: AppColor.redColor,
+          ),
+          onPressed: () => _showDeleteProductDialog(context, product.id),
+        ),
       ),
     );
   }
@@ -91,12 +150,12 @@ class AdProductWidget extends StatelessWidget {
                   bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Center(
                 child: Container(
-                  padding: EdgeInsets.all(20.0.h),
+                  padding: const EdgeInsets.all(20.0),
                   width: MediaQuery.of(context).size.width * 0.9,
                   height: MediaQuery.of(context).size.height * 0.6,
                   decoration: BoxDecoration(
                     color: AppColor.whiteColor,
-                    borderRadius: BorderRadius.circular(10.0.r),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: ListView(
                     children: [
@@ -104,67 +163,66 @@ class AdProductWidget extends StatelessWidget {
                         onTap: () => context
                             .getBloc<AdProductBloc>()
                             .add(const AdImagePickerEventEvent()),
-                        child: state.imageFile == null
-                            ? Icon(
+                        child: state.imageFileUpload == null
+                            ? const Icon(
                                 Icons.add_a_photo_outlined,
-                                size: 100.w,
+                                size: 100.0,
                               )
                             : Image.file(
-                                state.imageFile!,
+                                state.imageFileUpload!,
                               ),
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                       Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Product name',
-                            style: AppStyle.regular12,
-                          )),
-                      SizedBox(height: 5.0.h),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Product name',
+                          style: AppStyle.regular12,
+                        ),
+                      ),
+                      const SizedBox(height: 5.0),
                       AppTextField(
-                        controller: nameController,
+                        controller: _nameController,
                         hintText: 'Enter your product name',
                         fillColor: AppColor.greyColor300,
                         boderRadius: 10.0,
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                       Row(
                         children: [
                           _buildInputNumber(
-                            controller: priceController,
                             title: 'Price',
                             hintText: 'Enter your price',
+                            controller: _priceController,
                           ),
-                          SizedBox(width: 20.w),
+                          const SizedBox(width: 20.0),
                           _buildInputNumber(
-                            controller: quantityController,
                             title: 'Quantity',
                             hintText: 'Enter your quantity',
+                            controller: _quantityController,
                           ),
                         ],
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                       Text('Size', style: AppStyle.regular12),
-                      SizedBox(height: 10.0.h),
+                      const SizedBox(height: 10.0),
                       Row(
                         children: [
                           _buildSizeInput(
-                            controller: minSizeController,
-                            hintText: 'Min size',
-                          ),
+                              controller: _minSizeController,
+                              hintText: 'Min size'),
                           const Padding(
                             padding: EdgeInsets.symmetric(horizontal: 5.0),
                             child: Icon(Icons.arrow_right_alt_rounded),
                           ),
                           _buildSizeInput(
-                            controller: maxSizeController,
-                            hintText: 'Max size',
-                          ),
+                              controller: _maxSizeController,
+                              hintText: 'Max size'),
                         ],
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                       Text('Category', style: AppStyle.regular12),
-                      SizedBox(height: 10.0.h),
+                      const SizedBox(height: 10.0),
                       Expanded(
                         child: Container(
                           height: 53.0,
@@ -174,6 +232,10 @@ class AdProductWidget extends StatelessWidget {
                           ),
                           child: DropdownButton<CategoryModel>(
                             elevation: 16,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            icon: const SizedBox(),
+                            underline: const SizedBox(),
                             value: state.categoryModel,
                             onChanged: (value) {
                               context
@@ -184,7 +246,7 @@ class AdProductWidget extends StatelessWidget {
                               return DropdownMenuItem<CategoryModel>(
                                 value: category,
                                 child: Text(
-                                  category.name.toUpperCase(),
+                                  category.name!.toUpperCase(),
                                   textAlign: TextAlign.center,
                                   style: AppStyle.regular12
                                       .copyWith(color: AppColor.adminTextColor),
@@ -194,50 +256,48 @@ class AdProductWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                       Text('Description', style: AppStyle.regular12),
-                      SizedBox(height: 10.0.h),
+                      const SizedBox(height: 10.0),
                       Container(
                         padding: const EdgeInsets.all(10.0),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0.r),
+                          borderRadius: BorderRadius.circular(10.0),
                           border: Border.all(color: AppColor.greyColor),
                         ),
-                        child: EditableText(
-                          controller: descriptionController,
-                          focusNode: FocusNode(),
-                          style: AppStyle.regular12
-                              .copyWith(color: AppColor.textColor),
-                          cursorColor: AppColor.primaryColor,
+                        child: TextFormField(
+                          controller: _descriptionController,
                           maxLines: 5,
-                          backgroundCursorColor: AppColor.primaryColor,
-                          keyboardType: TextInputType.multiline,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 20.0.h),
+                      const SizedBox(height: 20.0),
                       AppButton(
                         boderRadius: 10.0,
                         buttonText: 'Submit',
-                        minimumSize: Size(double.infinity, 50.0.h),
+                        minimumSize: const Size(double.infinity, 50.0),
                         onPressed: () {
                           if (_formKey.currentState!.validate() &&
-                              state.imageFile != null) {
+                              state.imageFileUpload != null) {
                             context.getBloc<AdProductBloc>().add(
                                   AdAddNewProductEvent(
                                     AddProductModel(
-                                        productName: nameController.text,
-                                        price: double.parse(
-                                            priceController.text.trim()),
-                                        quantity: int.parse(
-                                            quantityController.text.trim()),
-                                        minSize:
-                                            int.parse(minSizeController.text),
-                                        maxSize:
-                                            int.parse(maxSizeController.text),
-                                        cateId: state.categoryModel!.id,
-                                        cateName: state.categoryModel!.name,
-                                        desctiption: descriptionController.text,
-                                        image: state.imageFile!),
+                                      productName: _nameController.text,
+                                      price: double.parse(
+                                          _priceController.text.trim()),
+                                      quantity: int.parse(
+                                          _quantityController.text.trim()),
+                                      minSize:
+                                          int.parse(_minSizeController.text),
+                                      maxSize:
+                                          int.parse(_maxSizeController.text),
+                                      cateId: state.categoryModel!.id!,
+                                      cateName: state.categoryModel!.name!,
+                                      desctiption: _descriptionController.text,
+                                      image: state.imageFileUpload!,
+                                    ),
                                   ),
                                 );
                           }
@@ -261,7 +321,7 @@ class AdProductWidget extends StatelessWidget {
         keyboardType: TextInputType.number,
         controller: controller,
         isInputSize: true,
-        boderRadius: 10.0.r,
+        boderRadius: 10.0,
         fillColor: AppColor.greyColor300,
         hintText: hintText,
         validator: Validator.checkIsEmpty,
@@ -276,12 +336,12 @@ class AdProductWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title ?? '', style: AppStyle.regular12),
-          SizedBox(height: 10.0.h),
+          const SizedBox(height: 10.0),
           AppTextField(
             keyboardType: TextInputType.number,
             isInputSize: true,
             controller: controller,
-            boderRadius: 10.0.r,
+            boderRadius: 10.0,
             fillColor: AppColor.greyColor300,
             hintText: hintText,
             validator: Validator.checkNumber,

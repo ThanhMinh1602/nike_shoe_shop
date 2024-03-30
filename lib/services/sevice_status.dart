@@ -4,7 +4,7 @@ enum SignupResult {
   failure,
   invalidEmail,
 }
-
+  
 enum SigninResult {
   successIsUser,
   successIsAdmin,

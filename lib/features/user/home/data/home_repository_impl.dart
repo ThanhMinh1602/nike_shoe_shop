@@ -5,36 +5,38 @@ import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
 import 'package:nike_shoe_shop/features/user/home/domain/repository/home_repository_interface.dart';
 import 'package:nike_shoe_shop/services/local/cart_service.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
-import 'package:nike_shoe_shop/services/remote/home_service.dart';
-import 'package:nike_shoe_shop/services/remote/profile_service.dart';
+import 'package:nike_shoe_shop/services/remote/auth_service.dart';
+import 'package:nike_shoe_shop/services/remote/category_service.dart';
+import 'package:nike_shoe_shop/services/remote/product_service.dart';
 
 class HomeRepositoryImpl implements IHomeRepository {
-  final HomeService homeService = HomeService();
   final CartService cartService = CartService();
-  final ProfileService profileService = ProfileService();
+  final CategoryService categoryService = CategoryService();
+  final ProductService productService = ProductService();
+  final AuthService authService = AuthService();
 
   @override
   Future<List<CategoryModel>> allCategories() async {
-    return homeService.fetchCategories();
+    return categoryService.fetchCategories();
   }
 
   @override
-  Future<List<ProductModel>> bestSalerProductByCategoryId(int cateId) async {
+  Future<List<ProductModel>> bestSalerProductByCategoryId(String cateId) async {
     final List<ProductModel> products =
-        await homeService.fetchBestSalerProducts();
+        await productService.fetchBestSalerProducts();
     return products.where((element) => element.categoryId == cateId).toList();
   }
 
   @override
-  Future<ProductModel> newProductByCategoryId(int cateId) async {
-    final List<ProductModel> products = await homeService.fetchNewProducts();
+  Future<ProductModel> newProductByCategoryId(String cateId) async {
+    final List<ProductModel> products = await productService.fetchNewProducts();
 
     return products.firstWhere((element) => element.categoryId == cateId);
   }
 
   @override
   Future<List<ProductModel>> searchProducts(String texSearch) {
-    return homeService.searchProducts(texSearch);
+    return productService.searchProducts(texSearch);
   }
 
   @override
@@ -49,6 +51,6 @@ class HomeRepositoryImpl implements IHomeRepository {
 
   @override
   Future<UserModel> userData() async {
-    return await profileService.fetchUserByUid();
+    return await authService.fetchUserByUid();
   }
 }

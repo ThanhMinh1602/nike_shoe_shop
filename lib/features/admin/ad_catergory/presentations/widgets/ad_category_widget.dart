@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -13,10 +14,10 @@ import 'package:nike_shoe_shop/features/admin/ad_catergory/presentations/bloc/ad
 import 'package:nike_shoe_shop/utils/validator.dart';
 
 class AdCategoryWidget extends StatelessWidget {
-  AdCategoryWidget({super.key});
+  AdCategoryWidget({Key? key}) : super(key: key);
+  final TextEditingController _nameController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController nameController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,34 +32,50 @@ class AdCategoryWidget extends StatelessWidget {
           } else {
             EasyLoading.dismiss();
           }
-          if (state.addNewCategorySuccess) {
-            AppDiaLog.showAwesomeDialog(
-              context,
-              content: 'Add category success',
-              btnOkOnPress: () => context.getNavigator().pop(),
-            );
-            nameController.clear();
-          }
         },
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0).copyWith(
-              top: 20.0,
-            ),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text(
+                  'Category list',
+                  style:
+                      AppStyle.regular20.copyWith(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 20.h),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColor.greyColor),
+                    borderRadius: BorderRadius.circular(10.0.r),
+                  ),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: state.categories.length,
+                    separatorBuilder: (_, __) => const Divider(
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    itemBuilder: (context, index) {
+                      return _buildCategoryListItem(
+                        context,
+                        state.categories[index],
+                        index,
+                      );
+                    },
+                  ),
+                ),
+                const Spacer(),
+                SizedBox(height: 10.h),
                 AppButton(
                   buttonText: 'Add new category',
-                  minimumSize: Size(100.0.h, 30.0.h),
+                  minimumSize: Size(double.infinity, 30.0.h),
+                  boderRadius: 10.0,
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) {
-                        return _formAddNewProduct(context);
-                      },
-                    );
+                    _showAddNewCategoryDialog(context);
                   },
-                )
+                ),
               ],
             ),
           );
@@ -67,7 +84,70 @@ class AdCategoryWidget extends StatelessWidget {
     );
   }
 
-  Widget _formAddNewProduct(BuildContext context) {
+  Widget _buildCategoryListItem(
+      BuildContext context, CategoryModel category, int index) {
+    return GestureDetector(
+      onTap: () => _showUpdateCategoryDialog(context, category),
+      child: ListTile(
+        leading: Text('${index + 1}', style: AppStyle.regular12),
+        title: Row(
+          children: [
+            Image.network(
+              category.image,
+              width: 30.0.w,
+            ),
+            SizedBox(width: 20.0.w),
+            Expanded(
+              child: Text(
+                category.name!.toUpperCase(),
+                style: AppStyle.regular12,
+              ),
+            ),
+          ],
+        ),
+        trailing: IconButton(
+          icon: const Icon(
+            Icons.delete_outline,
+            color: AppColor.redColor,
+          ),
+          onPressed: () => _showDeleteCategoryDialog(context, category),
+        ),
+      ),
+    );
+  }
+
+  void _showAddNewCategoryDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return _buildFormDialog(context, isNewCategory: true);
+      },
+    );
+  }
+
+  void _showUpdateCategoryDialog(BuildContext context, CategoryModel category) {
+    showDialog(
+      context: context,
+      builder: (_) {
+        return _buildFormDialog(context,
+            isNewCategory: false, category: category);
+      },
+    );
+  }
+
+  void _showDeleteCategoryDialog(BuildContext context, CategoryModel category) {
+    AppDiaLog.showAwesomeConfirmDialog(
+      context,
+      content: 'Do you want to delete this category?',
+      btnOkOnPress: () {
+        context.getBloc<AdCategoryBloc>().add(AdDeleteCategoryEvent(category.id!));
+      },
+    );
+  }
+
+  Widget _buildFormDialog(BuildContext context,
+      {bool isNewCategory = true, CategoryModel? category}) {
+    _nameController.text = isNewCategory ? '' : category!.name!;
     return BlocProvider.value(
       value: BlocProvider.of<AdCategoryBloc>(context),
       child: BlocBuilder<AdCategoryBloc, AdCategoryState>(
@@ -76,7 +156,8 @@ class AdCategoryWidget extends StatelessWidget {
             key: _formKey,
             child: Padding(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
               child: Center(
                 child: Container(
                   padding: EdgeInsets.all(20.0.h),
@@ -90,21 +171,21 @@ class AdCategoryWidget extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () => context
-                            .getBloc<AdCategoryBloc>()
-                            .add(const AdImagePickerEventEvent()),
-                        child: state.imageFile == null
-                            ? Icon(
+                            .read<AdCategoryBloc>()
+                            .add(const AdImagePickerEvent()),
+                        child: state.imageFile != null
+                            ? Image.file(
+                                state.imageFile!,
+                              )
+                            : Icon(
                                 Icons.add_a_photo_outlined,
                                 size: 100.w,
-                              )
-                            : Image.file(
-                                state.imageFile!,
                               ),
                       ),
                       SizedBox(height: 10.0.h),
                       if (state.imageFile == null)
                         Text(
-                          'Plese upload image file!',
+                          'Please upload an image file!',
                           textAlign: TextAlign.center,
                           style: AppStyle.adminLight10.copyWith(
                             color: AppColor.redColor,
@@ -112,14 +193,15 @@ class AdCategoryWidget extends StatelessWidget {
                         ),
                       SizedBox(height: 20.0.h),
                       Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Product name',
-                            style: AppStyle.regular12,
-                          )),
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Product name',
+                          style: AppStyle.regular12,
+                        ),
+                      ),
                       SizedBox(height: 5.0.h),
                       AppTextField(
-                        controller: nameController,
+                        controller: _nameController,
                         hintText: 'Enter your product name',
                         fillColor: AppColor.greyColor300,
                         validator: Validator.checkIsEmpty,
@@ -133,14 +215,28 @@ class AdCategoryWidget extends StatelessWidget {
                         onPressed: () {
                           if (_formKey.currentState!.validate() &&
                               state.imageFile != null) {
-                            context.getBloc<AdCategoryBloc>().add(
-                                  AdAddNewCategoryEvent(
-                                    CategoryModel(
-                                        id: '',
-                                        name: nameController.text,
-                                        image: state.imageFile),
-                                  ),
-                                );
+                            isNewCategory
+                                ? context.read<AdCategoryBloc>().add(
+                                      AdAddNewCategoryEvent(
+                                        CategoryModel(
+                                          id: '',
+                                          name: _nameController.text,
+                                          image: state.imageFile,
+                                          createAt: Timestamp.now(),
+                                        ),
+                                      ),
+                                    )
+                                : context.read<AdCategoryBloc>().add(
+                                      AdUpdateCategoryEvent(
+                                        CategoryModel(
+                                          id: category!.id,
+                                          name: _nameController.text,
+                                          image: state.imageFile,
+                                          createAt: category.createAt,
+                                        ),
+                                      ),
+                                    );
+                            _nameController.clear();
                           }
                         },
                       ),

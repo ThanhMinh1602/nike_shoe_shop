@@ -82,9 +82,10 @@ class SideBarWidget extends StatelessWidget {
                       label: 'Sign Out',
                       icon: Icons.logout_rounded,
                       onTap: () {
-                        AppDiaLog.showAwesomeDialog(
+                        AppDiaLog.showAwesomeSuccessDialog(
                           context,
                           content: 'Are you sure you want to log out?',
+                          // btnCancelOnPress: () {},
                           btnOkOnPress: () => context
                               .getBloc<HomeBloc>()
                               .add(const OnTapLogOutEvent()),

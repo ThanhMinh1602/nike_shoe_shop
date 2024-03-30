@@ -11,6 +11,7 @@ class ProductModel {
   final int viewCount;
   final int orderCount;
   final int quantity;
+  final int? favourute;
   final Timestamp? createAt;
 
   ProductModel(
@@ -23,6 +24,7 @@ class ProductModel {
       required this.sizes,
       required this.viewCount,
       required this.orderCount,
+      this.favourute,
       required this.quantity,
       this.createAt});
 
@@ -38,6 +40,7 @@ class ProductModel {
         viewCount: json['viewCount'],
         orderCount: json['orderCount'],
         quantity: json['quantity'],
+        favourute: json['favourute'],
         createAt: json['createAt']);
   }
 
@@ -49,9 +52,10 @@ class ProductModel {
         'price': price,
         'description': description,
         'sizes': sizes,
-        'viewCount': viewCount,
-        'orderCount': orderCount,
+        'viewCount': 0,
+        'orderCount': 0,
         'quantity': quantity,
+        'favourute': 0,
         'createAt': Timestamp.now(),
       };
 }

@@ -9,4 +9,8 @@ class AdProductEvent with _$AdProductEvent {
       AddProductModel addProductModel) = AdAddNewProductEvent;
   const factory AdProductEvent.adOnSelectCategoryEvent(
       CategoryModel categoryModel) = AdOnSelectCategoryEvent;
+  const factory AdProductEvent.adProductDeleteEvent(String idProduct) =
+      AdDeleteProductEvent;
+  const factory AdProductEvent.adProductUpdateEvent(ProductModel product) =
+      AdUpdateProductEvent;
 }
