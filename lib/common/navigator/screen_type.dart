@@ -15,10 +15,6 @@ class ScreenType with _$ScreenType {
       required double totalPrice}) = ScreenTypeCheckout;
   const factory ScreenType.profile(UserModel userModel) = ScreenTypeProfile;
   const factory ScreenType.order() = ScreenTypeOrder;
-  //web admin
-  const factory ScreenType.adminHome() = ScreenTypeAdHome;
-  const factory ScreenType.adminProduct() = ScreenTypeAdProduct;
-  const factory ScreenType.adminCategory() = ScreenTypeAdCategory;
 }
 
 class ScreenTypeHelper {
@@ -36,10 +32,7 @@ class ScreenTypeHelper {
       profile: (userModel) => ProfilePage(
         userModel: userModel,
       ),
-      order: () => const OrderPage(),
-      adminHome: () => const AdHomePage(),
-      adminProduct: () => const AdProductPage(),
-      adminCategory: () => const AdCategoryPage(),
+      order: () => const OrderPage()
     );
   }
 }

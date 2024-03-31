@@ -2,8 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
-import 'package:nike_shoe_shop/features/admin/ad_home/presentations/page/ad_home_page.dart';
-import 'package:nike_shoe_shop/features/user/splash/presentations/page/splash_page.dart';
+import 'package:nike_shoe_shop/features/splash/presentations/page/splash_page.dart';
 import 'package:nike_shoe_shop/services/firebase_options.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
@@ -35,8 +34,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(colorSchemeSeed: AppColor.primaryColor),
           debugShowCheckedModeBanner: false,
           title: 'sneacker_shop',
-          home: const AdHomePage(),
-          // home: const SplashPage(),
+          // home: const AdHomePage(),
+          home: const SplashPage(),
           builder: EasyLoading.init(),
         );
       },

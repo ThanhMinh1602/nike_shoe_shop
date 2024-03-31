@@ -34,7 +34,7 @@ class ProductModel {
         categoryId: json['categoryId'],
         name: json['name'],
         image: json['image'],
-        price: json['price'],
+        price: json['price'].toDouble(),
         description: json['description'],
         sizes: json['sizes'].cast<int>(),
         viewCount: json['viewCount'],
