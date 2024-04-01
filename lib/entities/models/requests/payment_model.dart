@@ -54,6 +54,8 @@ class PaymentModel {
     );
   }
 
+  get amount => null;
+
   Map<String, dynamic> toJson() {
     return {
       'uId': uId,

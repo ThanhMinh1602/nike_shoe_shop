@@ -7,7 +7,7 @@ import 'package:nike_shoe_shop/services/sevice_status.dart';
 
 class CheckoutRepositoryImpl implements ICheckoutRepository {
   final CartService cartService = CartService();
-  final PaymentService checkoutService = PaymentService();
+  final PaymentService paymentService = PaymentService();
 
   @override
   Future<List<CartModel>> getCartProducts() async {
@@ -17,11 +17,17 @@ class CheckoutRepositoryImpl implements ICheckoutRepository {
 
   @override
   Future<SendOrderStatus> sendOrder(PaymentModel paymentModel) async {
-    return await checkoutService.sendPayment(paymentModel);
+    return await paymentService.sendPayment(paymentModel);
   }
 
   @override
   Future<void> clearCart() async {
     await cartService.clearAllCart();
+  }
+
+  @override
+  Future<void> sendEmail(
+      String recipientEmail, PaymentModel paymentModel) async {
+    await paymentService.sendEmail(recipientEmail, paymentModel);
   }
 }

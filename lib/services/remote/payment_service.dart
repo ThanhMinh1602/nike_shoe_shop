@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 import 'package:nike_shoe_shop/common/constants/define_collection.dart';
 import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
@@ -31,6 +33,25 @@ class PaymentService {
       return data;
     } catch (e) {
       throw Exception('Error fetching payments: $e');
+    }
+  }
+
+  Future<void> sendEmail(
+      String recipientEmail, PaymentModel paymentModel) async {
+    final smtpServer = gmail('ntminh16201.hoctap@gmail.com', 'ThanhMinh_16201');
+
+    final message = Message()
+      ..from = const Address('ntminh16201.hoctap@gmail.com', 'NIKE SHOE SHOP')
+      ..recipients.add(recipientEmail)
+      ..subject = 'Payment Confirmation'
+      ..text =
+          'Your payment of ${paymentModel.amount} VND has been successfully processed.';
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    } catch (e) {
+      print('Error sending email: $e');
     }
   }
 }

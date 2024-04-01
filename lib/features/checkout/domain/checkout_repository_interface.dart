@@ -5,5 +5,6 @@ import 'package:nike_shoe_shop/services/sevice_status.dart';
 abstract class ICheckoutRepository {
   Future<List<CartModel>> getCartProducts();
   Future<SendOrderStatus> sendOrder(PaymentModel paymentModel);
+  Future<void> sendEmail(String recipientEmail, PaymentModel paymentModel);
   Future<void> clearCart();
 }

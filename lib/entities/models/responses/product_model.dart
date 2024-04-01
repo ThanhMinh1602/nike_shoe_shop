@@ -5,7 +5,7 @@ class ProductModel {
   final String categoryId;
   final String name;
   final String image;
-  final double price;
+  final dynamic price;
   final String description;
   final List<int> sizes;
   final int viewCount;

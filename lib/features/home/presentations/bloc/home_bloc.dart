@@ -36,7 +36,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     final categories = await repository.allCategories();
     final bestSalerProducts =
         await repository.bestSalerProductByCategoryId(categories[0].id!);
-        // print(bestSalerProducts.length);
+    // print(bestSalerProducts.length);
     final newProduct =
         await repository.newProductByCategoryId(categories[0].id!);
     final user = await repository.userData();
@@ -45,8 +45,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         categories: categories,
         bestSalerProducts: bestSalerProducts,
         newProduct: newProduct,
-        userModel: user
-        ));
+        userModel: user));
   }
 
   Future<void> _onLoadMorePopular(

@@ -120,11 +120,11 @@ class _HomeWidgetState extends State<HomeWidget> {
   }
 
   Widget _buildHomeContent(HomeState state) {
-    // if (state.bestSalerProducts.isEmpty ||
-    //     state.categories.isEmpty ||
-    //     state.newProduct == null) {
-    //   return _buildLoadingShimmer(state);
-    // }
+    if (state.bestSalerProducts.isEmpty ||
+        state.categories.isEmpty ||
+        state.newProduct == null) {
+      return _buildLoadingShimmer(state);
+    }
     return Column(
       children: [
         const SizedBox(height: 10.0),

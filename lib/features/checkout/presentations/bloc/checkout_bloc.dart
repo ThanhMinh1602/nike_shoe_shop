@@ -32,6 +32,7 @@ extension CheckoutBlocExtension on CheckoutBloc {
     emitter(state.copyWith(isLoading: true));
     await repository.sendOrder(event.paymentModel);
     await repository.clearCart();
+    await repository.sendEmail(event.paymentModel.email!, event.paymentModel);
     emitter(state.copyWith(paymentSuccess: true, isLoading: false));
     emitter(state.copyWith(paymentSuccess: false));
   }
