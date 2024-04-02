@@ -4,7 +4,7 @@ enum SignupResult {
   failure,
   invalidEmail,
 }
-  
+
 enum SigninResult {
   successIsUser,
   successIsAdmin,
@@ -14,4 +14,10 @@ enum SigninResult {
 enum SendOrderStatus {
   success,
   failure,
+}
+
+enum ResetPasswordStatus {
+  success,
+  failure,
+  emailNotFound,
 }

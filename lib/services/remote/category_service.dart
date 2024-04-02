@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nike_shoe_shop/common/constants/define_collection.dart';
-import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
+import 'package:nike_shoe_shop/entities/models/category_model.dart';
 
 class CategoryService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

@@ -2,10 +2,10 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
-import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
-import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/entities/models/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/user_model.dart';
+import 'package:nike_shoe_shop/entities/models/category_model.dart';
+import 'package:nike_shoe_shop/entities/models/product_model.dart';
 import 'package:nike_shoe_shop/features/home/data/home_repository_impl.dart';
 
 part 'home_event.dart';
@@ -28,21 +28,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on(_onTapLogOut);
     on(_onAddToCart);
   }
+}
 
+extension HomeBlocExtension on HomeBloc {
   Future<void> _onInit(
       HomeInitialEvent event, Emitter<HomeState> emitter) async {
     emitter(const HomeInitialState(isLoading: true));
-    //không lỗi
     final categories = await repository.allCategories();
     final bestSalerProducts =
         await repository.bestSalerProductByCategoryId(categories[0].id!);
-    // print(bestSalerProducts.length);
     final newProduct =
         await repository.newProductByCategoryId(categories[0].id!);
     final user = await repository.userData();
     emitter(state.copyWith(
         isLoading: false,
         categories: categories,
+        cateId: categories[0].id,
         bestSalerProducts: bestSalerProducts,
         newProduct: newProduct,
         userModel: user));

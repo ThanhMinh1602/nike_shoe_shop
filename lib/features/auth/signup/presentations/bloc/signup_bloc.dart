@@ -3,7 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:nike_shoe_shop/services/sevice_status.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
-import 'package:nike_shoe_shop/entities/models/requests/signup_request.dart';
+import 'package:nike_shoe_shop/entities/models/signup_request.dart';
 import 'package:nike_shoe_shop/services/remote/auth_service.dart';
 
 part 'signup_event.dart';

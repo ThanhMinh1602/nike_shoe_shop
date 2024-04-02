@@ -1,5 +1,5 @@
-import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
-import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
+import 'package:nike_shoe_shop/entities/models/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/payment_model.dart';
 import 'package:nike_shoe_shop/features/checkout/domain/checkout_repository_interface.dart';
 import 'package:nike_shoe_shop/services/local/cart_service.dart';
 import 'package:nike_shoe_shop/services/remote/payment_service.dart';
@@ -25,9 +25,9 @@ class CheckoutRepositoryImpl implements ICheckoutRepository {
     await cartService.clearAllCart();
   }
 
-  @override
-  Future<void> sendEmail(
-      String recipientEmail, PaymentModel paymentModel) async {
-    await paymentService.sendEmail(recipientEmail, paymentModel);
-  }
+  // @override
+  // Future<void> sendEmail(
+  //     String recipientEmail, PaymentModel paymentModel) async {
+  //   await paymentService.sendEmail(recipientEmail, paymentModel);
+  // }
 }

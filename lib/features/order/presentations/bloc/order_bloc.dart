@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
+import 'package:nike_shoe_shop/entities/models/payment_model.dart';
 import 'package:nike_shoe_shop/features/order/data/order_repsitory_impl.dart';
 
 part 'order_event.dart';

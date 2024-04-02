@@ -13,7 +13,7 @@ import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
-import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
+import 'package:nike_shoe_shop/entities/models/user_model.dart';
 import 'package:nike_shoe_shop/features/profile/presentations/bloc/profile_bloc.dart';
 import 'package:nike_shoe_shop/gen/assets.gen.dart';
 import 'package:nike_shoe_shop/utils/validator.dart';
@@ -92,8 +92,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     child: state.imageFile != null
                         ? CircleAvatar(
                             radius: 50.h,
-                            backgroundImage:
-                                FileImage(state.imageFile!))
+                            backgroundImage: FileImage(state.imageFile!))
                         : state.userModel?.avatar == null
                             ? CircleAvatar(
                                 radius: 50.h,
@@ -142,18 +141,29 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               controller: _emailController,
               readOnly: true,
             ),
-            const SizedBox(height: 12.0),
-            Text(
-              'Pasword',
-              style: AppStyle.regular14.copyWith(fontWeight: FontWeight.w700),
-            ),
-            const SizedBox(height: 12.0),
-            AppTextFieldPassword(
-              fillColor: AppColor.greyColor300,
-              hintText: 'Enter your password',
-              validator: Validator.checkPassword,
-              controller: _passwordController,
-            ),
+            // const SizedBox(height: 12.0),
+            // Text(
+            //   'Old password',
+            //   style: AppStyle.regular14.copyWith(fontWeight: FontWeight.w700),
+            // ),
+            // const SizedBox(height: 12.0),
+            // AppTextFieldPassword(
+            //   fillColor: AppColor.greyColor300,
+            //   hintText: 'Enter your password',
+            //   validator: Validator.checkPassword,
+            //   controller: _passwordController,
+            // ),
+            // Text(
+            //   'Old password',
+            //   style: AppStyle.regular14.copyWith(fontWeight: FontWeight.w700),
+            // ),
+            // const SizedBox(height: 12.0),
+            // AppTextFieldPassword(
+            //   fillColor: AppColor.greyColor300,
+            //   hintText: 'Enter your password',
+            //   validator: Validator.checkPassword,
+            //   controller: _passwordController,
+            // ),
             const SizedBox(height: 50.0),
             AppButton(
               buttonText: 'Submit',

@@ -3,14 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
-import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/promotion_model.dart';
+import 'package:nike_shoe_shop/entities/models/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/product_model.dart';
+import 'package:nike_shoe_shop/entities/models/promotion_model.dart';
 import 'package:nike_shoe_shop/features/home/presentations/bloc/home_bloc.dart';
 import 'package:nike_shoe_shop/features/home/presentations/widgets/side_bar_widget.dart';
 import 'package:nike_shoe_shop/gen/assets.gen.dart';
@@ -104,7 +103,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       child: SearchBar(
         controller: _searchController,
         onChanged: (value) =>
-            context.read<HomeBloc>().add(OnTapSearchProductEvent(value)),
+            context.getBloc<HomeBloc>().add(OnTapSearchProductEvent(value)),
         hintText: 'Looking for shoes',
         hintStyle: MaterialStateProperty.all(
           AppStyle.regular10.copyWith(color: AppColor.subTextColor),

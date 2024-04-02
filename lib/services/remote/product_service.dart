@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nike_shoe_shop/common/constants/define_collection.dart';
-import 'package:nike_shoe_shop/entities/models/requests/add_product_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/entities/models/add_product_model.dart';
+import 'package:nike_shoe_shop/entities/models/product_model.dart';
 import 'package:path/path.dart';
 
 class ProductService {

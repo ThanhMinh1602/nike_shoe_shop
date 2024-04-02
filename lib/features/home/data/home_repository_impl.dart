@@ -1,7 +1,7 @@
-import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
-import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/category_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/entities/models/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/user_model.dart';
+import 'package:nike_shoe_shop/entities/models/category_model.dart';
+import 'package:nike_shoe_shop/entities/models/product_model.dart';
 import 'package:nike_shoe_shop/features/home/domain/repository/home_repository_interface.dart';
 import 'package:nike_shoe_shop/services/local/cart_service.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';

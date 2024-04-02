@@ -9,7 +9,7 @@ import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
-import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
+import 'package:nike_shoe_shop/entities/models/payment_model.dart';
 import 'package:nike_shoe_shop/features/checkout/presentations/bloc/checkout_bloc.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/utils/validator.dart';

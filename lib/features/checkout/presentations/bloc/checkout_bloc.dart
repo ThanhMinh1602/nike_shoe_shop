@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
-import 'package:nike_shoe_shop/entities/models/requests/payment_model.dart';
+import 'package:nike_shoe_shop/entities/models/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/payment_model.dart';
 import 'package:nike_shoe_shop/features/checkout/data/checkout_repository_impl.dart';
 
 part 'checkout_event.dart';
@@ -31,8 +31,9 @@ extension CheckoutBlocExtension on CheckoutBloc {
       OnTapPaymentEvent event, Emitter<CheckoutState> emitter) async {
     emitter(state.copyWith(isLoading: true));
     await repository.sendOrder(event.paymentModel);
+    // await repository.sendEmail(event.paymentModel.email!, event.paymentModel);
     await repository.clearCart();
-    await repository.sendEmail(event.paymentModel.email!, event.paymentModel);
+
     emitter(state.copyWith(paymentSuccess: true, isLoading: false));
     emitter(state.copyWith(paymentSuccess: false));
   }

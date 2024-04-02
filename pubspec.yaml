@@ -45,13 +45,13 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   freezed_annotation: ^2.4.1
   google_fonts: ^6.2.1
-  google_sign_in: ^6.2.1
   http: ^1.2.1
   image_picker: ^1.0.7
   input_quantity: ^2.3.2
   intl: ^0.19.0
   lottie: ^3.1.0
   mailer: ^6.1.0
+  otp: ^3.1.4
   page_transition: ^2.1.0
   path: ^1.9.0
   roundcheckbox: ^2.0.5

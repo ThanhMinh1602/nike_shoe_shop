@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
+import 'package:nike_shoe_shop/entities/models/user_model.dart';
 import 'package:nike_shoe_shop/features/profile/presentations/binding/profile_binding.dart';
 import 'package:nike_shoe_shop/features/profile/presentations/widgets/profile_widget.dart';
 

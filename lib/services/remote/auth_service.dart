@@ -4,15 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:nike_shoe_shop/common/constants/define_collection.dart';
-import 'package:nike_shoe_shop/entities/models/requests/login_request.dart';
-import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
+import 'package:nike_shoe_shop/entities/models/login_request.dart';
+import 'package:nike_shoe_shop/entities/models/user_model.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/services/sevice_status.dart';
-import 'package:nike_shoe_shop/entities/models/requests/signup_request.dart';
+import 'package:nike_shoe_shop/entities/models/signup_request.dart';
 import 'package:path/path.dart';
 
 class AuthService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   Future<SignupResult> signUpWithEmail(SignupRequest signupRequest) async {
     try {
       final auth = await FirebaseAuth.instance
@@ -98,6 +99,29 @@ class AuthService {
       throw Exception(e.message);
     } catch (e) {
       throw Exception(e);
+    }
+  }
+
+  Future<ResetPasswordStatus> resetPassword(String email) async {
+    try {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+      final checkEmail = await firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      if (checkEmail.docs.isEmpty) {
+        return ResetPasswordStatus.emailNotFound;
+      }
+      await auth.sendPasswordResetEmail(
+        email: email,
+      );
+      return ResetPasswordStatus.success;
+    } catch (e) {
+      print('Error resetting password: $e');
+      return ResetPasswordStatus.failure;
     }
   }
 

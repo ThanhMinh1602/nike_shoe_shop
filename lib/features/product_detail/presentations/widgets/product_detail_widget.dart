@@ -7,8 +7,8 @@ import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
-import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/entities/models/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/product_model.dart';
 import 'package:nike_shoe_shop/features/product_detail/presentations/bloc/product_detail_bloc.dart';
 
 class ProductDetailWidget extends StatefulWidget {

@@ -1,8 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:nike_shoe_shop/entities/models/requests/user_model.dart';
-import 'package:nike_shoe_shop/entities/models/responses/product_model.dart';
+import 'package:nike_shoe_shop/entities/models/user_model.dart';
+import 'package:nike_shoe_shop/entities/models/product_model.dart';
 import 'package:nike_shoe_shop/features/auth/login/presentations/page/login_page.dart';
+import 'package:nike_shoe_shop/features/auth/recovery_password/presentations/page/recovery_password_page.dart';
 import 'package:nike_shoe_shop/features/auth/signup/presentations/page/signup_page.dart';
 import 'package:nike_shoe_shop/features/cart/presentations/page/cart_page.dart';
 import 'package:nike_shoe_shop/features/checkout/presentations/page/checkout_page.dart';

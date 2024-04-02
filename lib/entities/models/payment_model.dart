@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:nike_shoe_shop/entities/models/local_model/cart_model.dart';
+import 'package:nike_shoe_shop/entities/models/cart_model.dart';
 
 class PaymentModel {
   final String? uId;
@@ -54,7 +54,7 @@ class PaymentModel {
     );
   }
 
-  get amount => null;
+  get amount => totalPrice;
 
   Map<String, dynamic> toJson() {
     return {

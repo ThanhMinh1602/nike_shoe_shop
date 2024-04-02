@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +10,8 @@ import 'package:nike_shoe_shop/common/components/textfields/app_text_field_passw
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
-import 'package:nike_shoe_shop/entities/models/requests/login_request.dart';
+import 'package:nike_shoe_shop/common/navigator/navigator.dart';
+import 'package:nike_shoe_shop/entities/models/login_request.dart';
 import 'package:nike_shoe_shop/features/auth/login/presentations/bloc/login_bloc.dart';
 import 'package:nike_shoe_shop/utils/validator.dart';
 
@@ -52,10 +54,15 @@ class LoginWidget extends StatelessWidget {
                 const SizedBox(height: 12.0),
                 _buildPasswordInput(),
                 const SizedBox(height: 12.0),
-                Text(
-                  'Recovery Password',
-                  textAlign: TextAlign.end,
-                  style: AppStyle.regular10,
+                GestureDetector(
+                  onTap: () => context
+                      .getNavigator()
+                      .push(screen: const ScreenType.recovery()),
+                  child: Text(
+                    'Recovery Password',
+                    textAlign: TextAlign.end,
+                    style: AppStyle.regular10,
+                  ),
                 ),
                 const SizedBox(height: 30.0),
                 _buildLoginButton(context),
