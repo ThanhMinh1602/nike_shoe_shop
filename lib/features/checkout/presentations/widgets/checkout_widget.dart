@@ -2,11 +2,13 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nike_shoe_shop/common/components/appbar/appbar_custom.dart';
 import 'package:nike_shoe_shop/common/components/buttons/app_button.dart';
 import 'package:nike_shoe_shop/common/constants/app_color.dart';
 import 'package:nike_shoe_shop/common/constants/app_style.dart';
+import 'package:nike_shoe_shop/common/constants/paypal_payment.dart';
 import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/common/navigator/navigator.dart';
 import 'package:nike_shoe_shop/entities/models/payment_model.dart';
@@ -87,10 +89,24 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
             children: [
               _buildPaymentContent(state),
               _buildTotalPrice(
-                  totalPrice: widget.totalPrice.toString(),
-                  totalProduct: widget.totalProduct.toString(),
-                  onTapCheckout: () {
-                    if (_formKey.currentState!.validate()) {
+                state,
+                totalPrice: widget.totalPrice.toString(),
+                totalProduct: widget.totalProduct.toString(),
+                // onTapCheckout: () {
+                //   if (_formKey.currentState!.validate()) {
+                //     context.getBloc<CheckoutBloc>().add(
+                //           PaypalPaymentEvent(widget.totalPrice.toString()),
+                //         );
+                //   }
+                // },
+
+                onTapCheckout: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (state.paymentMethod == PaymentMethod.paypal) {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => _buildePaypalPayment(state),
+                      ));
+                    } else {
                       context.getBloc<CheckoutBloc>().add(
                             OnTapPaymentEvent(
                               PaymentModel(
@@ -103,19 +119,69 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                 cartData: state.listCart,
                                 totalPrice: widget.totalPrice,
                                 totalProduct: widget.totalProduct,
-                                paymentMethod: 'Thanh toán khi nhận hàng',
+                                paymentMethod: 'Payment On Delivery',
                                 paymentStatus: false,
                                 createdAt: DateTime.now(),
                               ),
                             ),
                           );
                     }
-                  }),
+                  }
+                },
+              ),
             ],
           ),
         );
       },
     );
+  }
+
+  UsePaypal _buildePaypalPayment(CheckoutState state) {
+    return UsePaypal(
+        sandboxMode: true,
+        clientId: PaypalPayment.clientId,
+        secretKey: PaypalPayment.secretKey,
+        returnURL: "https://samplesite.com/return",
+        cancelURL: "https://samplesite.com/cancel",
+        transactions: [
+          {
+            "amount": {
+              "total": widget.totalPrice,
+              "currency": "USD",
+              "details": {
+                "subtotal": widget.totalPrice,
+                "shipping": '0',
+                "shipping_discount": 0
+              }
+            },
+            "description": "The payment transaction description.",
+          }
+        ],
+        note: "Contact us for any questions on your order.",
+        onSuccess: () async {
+          context.getBloc<CheckoutBloc>().add(
+                OnTapPaymentEvent(
+                  PaymentModel(
+                    uId: SharedPrefs.token,
+                    customerName: _nameController.text,
+                    email: _emailController.text,
+                    phoneNumber: _phoneNumberController.text,
+                    address: _addressController.text,
+                    note: _noteController.text,
+                    cartData: state.listCart,
+                    totalPrice: widget.totalPrice,
+                    totalProduct: widget.totalProduct,
+                    paymentMethod: 'Paypal payment',
+                    paymentStatus: true,
+                    createdAt: DateTime.now(),
+                  ),
+                ),
+              );
+        },
+        onError: (error) {},
+        onCancel: (params) {
+          print('cancelled: $params');
+        });
   }
 
   Widget _buildPaymentContent(CheckoutState state) {
@@ -305,7 +371,8 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
     );
   }
 
-  Widget _buildTotalPrice({
+  Widget _buildTotalPrice(
+    CheckoutState state, {
     String? totalPrice,
     String? totalProduct,
     void Function()? onTapCheckout,
@@ -331,6 +398,32 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
             children: [
               Text('Total Product', style: AppStyle.regular12),
               Text(totalProduct ?? '0', style: AppStyle.regular12),
+            ],
+          ),
+          SizedBox(height: 20.0.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Payment method', style: AppStyle.regular12),
+              DropdownButton<PaymentMethod>(
+                underline: const SizedBox(),
+                value: state.paymentMethod,
+                items: const [
+                  DropdownMenuItem(
+                    value: PaymentMethod.paypal,
+                    child: Text('PayPal'),
+                  ),
+                  DropdownMenuItem(
+                    value: PaymentMethod.onDelivery,
+                    child: Text('On delivery'),
+                  ),
+                ],
+                onChanged: (value) {
+                  context
+                      .getBloc<CheckoutBloc>()
+                      .add(OnTapSelectPaymentEvent(value!));
+                },
+              ),
             ],
           ),
           SizedBox(height: 20.0.h),

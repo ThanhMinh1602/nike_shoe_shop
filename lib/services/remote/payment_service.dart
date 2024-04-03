@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
+import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:nike_shoe_shop/common/constants/define_collection.dart';
+import 'package:nike_shoe_shop/common/constants/paypal_payment.dart';
 import 'package:nike_shoe_shop/entities/models/payment_model.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/services/sevice_status.dart';
@@ -10,11 +10,15 @@ class PaymentService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<SendOrderStatus> sendPayment(PaymentModel paymentModel) async {
     try {
+      final docId =
+          _firestore.collection(AppDefineCollection.APP_PAYMENT).doc().id;
       final paymentsCollection =
           _firestore.collection(AppDefineCollection.APP_PAYMENT);
       final data = paymentModel.toJson();
-
-      await paymentsCollection.add(data);
+      await paymentsCollection.doc(docId).set({
+        ...data,
+        'paymentId': docId,
+      });
       return SendOrderStatus.success;
     } catch (e) {
       return SendOrderStatus.failure;
@@ -36,22 +40,36 @@ class PaymentService {
     }
   }
 
-  // Future<void> sendEmail(
-  //     String recipientEmail, PaymentModel paymentModel) async {
-  //   final smtpServer = gmail('ntminh16201.hoctap@gmail.com', 'ThanhMinh_16201');
-
-  //   final message = Message()
-  //     ..from = const Address('ntminh16201.hoctap@gmail.com', 'NIKE SHOE SHOP')
-  //     ..recipients.add(recipientEmail)
-  //     ..subject = 'Payment Confirmation'
-  //     ..text =
-  //         'Your payment of ${paymentModel.amount} VND has been successfully processed.';
-
-  //   try {
-  //     final sendReport = await send(message, smtpServer);
-  //     print('Message sent: ' + sendReport.toString());
-  //   } catch (e) {
-  //     print('Error sending email: $e');
-  //   }
+  // Future<UsePaypal> paypalPayment(String totalPrice) async {
+  //   return UsePaypal(
+  //       sandboxMode: true,
+  //       clientId: PaypalPayment.clientId,
+  //       secretKey: PaypalPayment.secretKey,
+  //       returnURL: "https://samplesite.com/return",
+  //       cancelURL: "https://samplesite.com/cancel",
+  //       transactions: [
+  //         {
+  //           "amount": {
+  //             "total": totalPrice,
+  //             "currency": "USD",
+  //             "details": {
+  //               "subtotal": totalPrice,
+  //               "shipping": '0',
+  //               "shipping_discount": 0
+  //             }
+  //           },
+  //           "description": "The payment transaction description.",
+  //         }
+  //       ],
+  //       note: "Contact us for any questions on your order.",
+  //       onSuccess: (Map params) async {
+  //         print("onSuccess: $params");
+  //       },
+  //       onError: (error) {
+  //         print("onError: $error");
+  //       },
+  //       onCancel: (params) {
+  //         print('cancelled: $params');
+  //       });
   // }
 }
