@@ -35,7 +35,7 @@ extension LoginBlocExtension on LoginBloc {
     emit(state.copyWith(isLoading: true));
     final result = await authService.signInWithEmail(event.loginRequest);
     emit(state.copyWith(isLoading: false));
-    if (result == SigninResult.successIsUser) {
+    if (result == SigninResult.success) {
       await setTokenUseCase();
       appNavigator.pushAndRemoveUntil(screen: const ScreenType.home());
     } else {
