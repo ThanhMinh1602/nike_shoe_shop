@@ -34,7 +34,7 @@ class AuthService {
           avatar: 'https://avatar-management.services.atlassian.com/default/16',
           name: signupRequest.name);
       await FirebaseFirestore.instance
-          .collection(AppDefineCollection.APP_USER)
+          .collection(AppDefineCollection.APP_ACCOUNT)
           .doc(uid)
           .set(usermodel.toJson());
       return SignupResult.success;
@@ -75,7 +75,7 @@ class AuthService {
       }
       await currentUser.updatePassword(newPassword);
       _firestore
-          .collection(AppDefineCollection.APP_USER)
+          .collection(AppDefineCollection.APP_ACCOUNT)
           .doc(currentUser.uid)
           .update({'password': newPassword});
     } on FirebaseAuthException catch (e) {
@@ -111,7 +111,7 @@ class AuthService {
   Future<UserModel> fetchUserByUid() async {
     try {
       final queryData = await _firestore
-          .collection(AppDefineCollection.APP_USER)
+          .collection(AppDefineCollection.APP_ACCOUNT)
           .doc(SharedPrefs.token)
           .get();
       var userData = queryData.data();
@@ -148,7 +148,7 @@ class AuthService {
       UserModel userModel, String imageUrl) async {
     try {
       final userDocRef = _firestore
-          .collection(AppDefineCollection.APP_USER)
+          .collection(AppDefineCollection.APP_ACCOUNT)
           .doc(SharedPrefs.token);
       await userDocRef.update({
         ...userModel.toJson(),
@@ -162,7 +162,7 @@ class AuthService {
   Future<void> _updateUserWithoutAvatar(UserModel userModel) async {
     try {
       final userDocRef = _firestore
-          .collection(AppDefineCollection.APP_USER)
+          .collection(AppDefineCollection.APP_ACCOUNT)
           .doc(SharedPrefs.token);
       await userDocRef.update(
         userModel.toJson(),
