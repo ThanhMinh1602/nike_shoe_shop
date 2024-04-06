@@ -92,14 +92,6 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                 state,
                 totalPrice: widget.totalPrice.toString(),
                 totalProduct: widget.totalProduct.toString(),
-                // onTapCheckout: () {
-                //   if (_formKey.currentState!.validate()) {
-                //     context.getBloc<CheckoutBloc>().add(
-                //           PaypalPaymentEvent(widget.totalPrice.toString()),
-                //         );
-                //   }
-                // },
-
                 onTapCheckout: () async {
                   if (_formKey.currentState!.validate()) {
                     if (state.paymentMethod == PaymentMethod.paypal) {
@@ -158,7 +150,8 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
           }
         ],
         note: "Contact us for any questions on your order.",
-        onSuccess: () async {
+        onSuccess: (Map params) async {
+          print("onSuccess: $params");
           context.getBloc<CheckoutBloc>().add(
                 OnTapPaymentEvent(
                   PaymentModel(
@@ -178,7 +171,9 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                 ),
               );
         },
-        onError: (error) {},
+        onError: (error) {
+          print('error: $error');
+        },
         onCancel: (params) {
           print('cancelled: $params');
         });
