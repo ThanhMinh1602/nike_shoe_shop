@@ -16,12 +16,6 @@ class AuthService {
 
   Future<SignupResult> signUpWithEmail(SignupRequest signupRequest) async {
     try {
-      final auth = await FirebaseAuth.instance
-          // ignore: deprecated_member_use
-          .fetchSignInMethodsForEmail(signupRequest.email);
-      if (auth.isNotEmpty) {
-        return SignupResult.emailAlreadyExists;
-      }
       UserCredential userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: signupRequest.email,
@@ -91,7 +85,7 @@ class AuthService {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
 
       final checkEmail = await firestore
-          .collection('users')
+          .collection(AppDefineCollection.APP_ACCOUNT)
           .where('email', isEqualTo: email)
           .get();
 

@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_paypal/flutter_paypal.dart';
 import 'package:nike_shoe_shop/common/constants/define_collection.dart';
-import 'package:nike_shoe_shop/common/constants/paypal_payment.dart';
 import 'package:nike_shoe_shop/entities/models/payment_model.dart';
 import 'package:nike_shoe_shop/services/local/share_pref.dart';
 import 'package:nike_shoe_shop/services/sevice_status.dart';
