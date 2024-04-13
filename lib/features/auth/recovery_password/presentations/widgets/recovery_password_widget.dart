@@ -11,10 +11,25 @@ import 'package:nike_shoe_shop/common/extensions/build_context_extension.dart';
 import 'package:nike_shoe_shop/features/auth/recovery_password/presentations/bloc/recovery_password_bloc.dart';
 import 'package:nike_shoe_shop/utils/validator.dart';
 
-class RecoveryPasswordWidget extends StatelessWidget {
+class RecoveryPasswordWidget extends StatefulWidget {
   RecoveryPasswordWidget({super.key});
+
+  @override
+  State<RecoveryPasswordWidget> createState() => _RecoveryPasswordWidgetState();
+}
+
+class _RecoveryPasswordWidgetState extends State<RecoveryPasswordWidget> {
   final TextEditingController _emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  void onTapRecoveryPassword() {
+    if (_formKey.currentState!.validate()) {
+      context
+          .getBloc<RecoveryPasswordBloc>()
+          .add(RecoveryPasswordResetPasswordEvent(_emailController.text));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -55,13 +70,7 @@ class RecoveryPasswordWidget extends StatelessWidget {
               SizedBox(height: 40.0.h),
               AppButton(
                 buttonText: 'Continue',
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.getBloc<RecoveryPasswordBloc>().add(
-                        RecoveryPasswordResetPasswordEvent(
-                            _emailController.text));
-                  }
-                },
+                onPressed: onTapRecoveryPassword,
               )
             ],
           ),
